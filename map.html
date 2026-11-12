@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JELITA - Peta Petualangan</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="prefetch" href="pos01.html">
+  <link rel="prefetch" href="menu.html">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    html, body { width: 100vw; height: 100vh; overflow: hidden; background-color: #2e7d32; font-family: 'Segoe UI', Roboto, sans-serif; }
+    .game-wrapper { position: relative; width: 100vw; height: 100vh; background: #2e7d32 url('assets/images/map.png') no-repeat center center; background-size: cover; }
+
+    .logo-jelita-top { position: absolute; top: 3%; left: 2%; height: min(13vw, 70px); z-index: 1000; pointer-events: none; }
+
+    /* 3 Tombol Pojok Kanan Atas: Home, Sound, Pause */
+    .top-right-controls { position: absolute; top: 3.5%; right: 3%; display: flex; gap: 10px; z-index: 1000; }
+    .top-right-controls button { background: none; border: none; cursor: pointer; outline: none; transition: transform 0.2s; }
+    .top-right-controls button:hover { transform: scale(1.1); }
+    .top-right-controls img { height: min(8vw, 55px); filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.4)); }
+
+    /* Tombol Navigasi Bawah: Back & Go (Ukuran Seimbang) */
+    .btn-action { position: absolute; background: none; border: none; cursor: pointer; outline: none; z-index: 1000; transition: transform 0.2s, filter 0.2s; }
+    .btn-action:hover { transform: scale(1.08); filter: brightness(1.1); }
+    .btn-action:active { transform: scale(0.92); }
+
+    .btn-back { bottom: 4%; left: 3%; }
+    .btn-back img { height: min(15vw, 90px); filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.5)); }
+
+    .btn-go { bottom: 4%; right: 3%; }
+    .btn-go img { height: min(15vw, 90px); filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.5)); }
+  </style>
+</head>
+<body>
+  <div class="game-wrapper">
+    <img src="assets/images/jelita.png" alt="Logo JELITA" class="logo-jelita-top">
+
+    <!-- BGM Utama (audio1.mp3) -->
+    <audio id="bgMusic" loop preload="auto">
+      <source src="assets/audio/audio1.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Controls Pojok Kanan Atas -->
+    <div class="top-right-controls">
+      <button id="btnHome" title="Kembali ke Menu Utama"><img src="assets/images/home.png" alt="Home"></button>
+      <button id="btnSound" title="Nyalakan Suara"><img src="assets/images/sound.png" alt="Sound"></button>
+      <button id="btnPause" title="Matikan Suara"><img src="assets/images/pause.png" alt="Pause"></button>
+    </div>
+
+    <!-- Navigasi Bawah -->
+    <button class="btn-action btn-back" id="btnBack" title="Kembali ke Menu Utama"><img src="assets/images/back.png" alt="Kembali"></button>
+    <button class="btn-action btn-go" id="btnGo" title="Masuk ke Pos 01"><img src="assets/images/go.png" alt="Go"></button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const bgMusic = document.getElementById('bgMusic');
+      const btnHome = document.getElementById('btnHome');
+      const btnSound = document.getElementById('btnSound');
+      const btnPause = document.getElementById('btnPause');
+      const btnBack = document.getElementById('btnBack');
+      const btnGo = document.getElementById('btnGo');
+
+      bgMusic.volume = 0.35;
+
+      const savedTime = parseFloat(localStorage.getItem('jelita_bgm_time') || 0);
+      const isMuted = localStorage.getItem('jelita_bgm_muted') === 'true';
+
+      function playMusic() {
+        if (!isMuted) {
+          if (savedTime > 0) {
+            try { bgMusic.currentTime = savedTime; } catch(e){}
+          }
+          bgMusic.play().catch(() => {
+            const unlock = () => {
+              bgMusic.play();
+              document.removeEventListener('click', unlock);
+              document.removeEventListener('touchstart', unlock);
+            };
+            document.addEventListener('click', unlock);
+            document.addEventListener('touchstart', unlock);
+          });
+        }
+      }
+
+      if (bgMusic.readyState >= 1) {
+        playMusic();
+      } else {
+        bgMusic.addEventListener('loadedmetadata', playMusic, { once: true });
+      }
+
+      bgMusic.addEventListener('timeupdate', () => {
+        if (!bgMusic.paused && bgMusic.currentTime > 0) {
+          localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString());
+        }
+      });
+
+      // Kontrol Home
+      if (btnHome) {
+        btnHome.addEventListener('click', () => {
+          if (!bgMusic.paused) localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString());
+          window.location.href = 'menu.html';
+        });
+      }
+
+      // Kontrol Sound & Pause
+      if (btnSound) {
+        btnSound.addEventListener('click', () => {
+          localStorage.setItem('jelita_bgm_muted', 'false');
+          bgMusic.play();
+        });
+      }
+
+      if (btnPause) {
+        btnPause.addEventListener('click', () => {
+          localStorage.setItem('jelita_bgm_muted', 'true');
+          bgMusic.pause();
+        });
+      }
+
+      // Tombol Back (Kiri Bawah -> Menuju Menu Utama)
+      if (btnBack) {
+        btnBack.addEventListener('click', () => {
+          if (!bgMusic.paused) localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString());
+          window.location.href = 'menu.html';
+        });
+      }
+
+      // Tombol Go (Kanan Bawah -> Menuju Pos 01)
+      if (btnGo) {
+        btnGo.addEventListener('click', () => {
+          if (!bgMusic.paused) localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString());
+          window.location.href = 'pos01.html';
+        });
+      }
+    });
+  </script>
+</body>
+</html>

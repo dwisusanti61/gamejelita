@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JELITA - Pos 1: Gerbang Wana Kahyangan</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="prefetch" href="pos1.html">
+  <link rel="prefetch" href="map.html">
+  <link rel="prefetch" href="menu.html">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #2e7d32;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* Fullscreen Wrapper Latar pos01.png */
+    .game-wrapper {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background: #2e7d32 url('assets/images/pos01.png') no-repeat center center;
+      background-size: cover;
+    }
+
+    /* Logo JELITA di Pojok Kiri Atas */
+    .logo-jelita-top {
+      position: absolute;
+      top: 3%;
+      left: 2%;
+      height: min(13vw, 70px);
+      width: auto;
+      filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.4));
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* Style Tombol Aksi Universal */
+    .btn-action {
+      position: absolute;
+      background: none;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      z-index: 1000;
+      transition: transform 0.2s ease, filter 0.2s ease;
+      pointer-events: auto;
+    }
+
+    .btn-action:hover {
+      transform: scale(1.1);
+      filter: brightness(1.1);
+    }
+
+    .btn-action:active {
+      transform: scale(0.92);
+    }
+
+    /* Group 3 Tombol Pojok Kanan Atas: Home, Sound, Pause */
+    .top-right-controls {
+      position: absolute;
+      top: 3.5%;
+      right: 3%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 1000;
+    }
+
+    .top-right-controls button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      transition: transform 0.2s ease, filter 0.2s ease;
+      pointer-events: auto;
+    }
+
+    .top-right-controls button:hover {
+      transform: scale(1.1);
+      filter: brightness(1.1);
+    }
+
+    .top-right-controls button:active {
+      transform: scale(0.92);
+    }
+
+    .top-right-controls img {
+      height: min(8vw, 55px);
+      width: auto;
+      filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.4));
+    }
+
+    /* Tombol Back di Kiri Bawah */
+    .btn-back {
+      bottom: 4%;
+      left: 3%;
+    }
+
+    .btn-back img {
+      height: min(15vw, 90px);
+      width: auto;
+      filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.5));
+    }
+
+    /* Tombol Siap Raka di Kanan Bawah */
+    .btn-siapraka {
+      bottom: 4%;
+      right: 3%;
+    }
+
+    .btn-siapraka img {
+      height: min(16vw, 100px);
+      width: auto;
+      filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.5));
+    }
+
+    /* Penyesuaian HP Landscape */
+    @media (max-height: 500px) {
+      .logo-jelita-top {
+        height: 45px;
+      }
+      .top-right-controls img {
+        height: 40px;
+      }
+      .btn-back img {
+        height: min(18vw, 65px);
+      }
+      .btn-siapraka img {
+        height: min(20vw, 75px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-wrapper">
+    <!-- Logo JELITA Pojok Kiri Atas -->
+    <img src="assets/images/jelita.png" alt="Logo JELITA" class="logo-jelita-top">
+
+    <!-- Audio Lokal Pos 1 (audio2.mp3) -->
+    <audio id="bgMusic" loop preload="auto">
+      <source src="assets/audio/audio2.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Group 3 Tombol Kanan Atas (Home, Sound, Pause) -->
+    <div class="top-right-controls">
+      <button id="btnHome" title="Kembali ke Menu Utama">
+        <img src="assets/images/home.png" alt="Home">
+      </button>
+      <button id="btnSound" title="Nyalakan Suara">
+        <img src="assets/images/sound.png" alt="Sound">
+      </button>
+      <button id="btnPause" title="Matikan Suara">
+        <img src="assets/images/pause.png" alt="Pause">
+      </button>
+    </div>
+
+    <!-- Tombol Back (Kiri Bawah -> map.html) -->
+    <button class="btn-action btn-back" id="btnBack" title="Kembali ke Peta">
+      <img src="assets/images/back.png" alt="Kembali">
+    </button>
+
+    <!-- Tombol Siap Raka (Kanan Bawah -> pos1.html) -->
+    <button class="btn-action btn-siapraka" id="btnSiapRaka" title="Siap, Raka!">
+      <img src="assets/images/siapraka.png" alt="Siap, Raka!">
+    </button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnHome = document.getElementById('btnHome');
+      const btnSound = document.getElementById('btnSound');
+      const btnPause = document.getElementById('btnPause');
+      const btnBack = document.getElementById('btnBack');
+      const btnSiapRaka = document.getElementById('btnSiapRaka');
+      const bgMusic = document.getElementById('bgMusic');
+
+      bgMusic.volume = 0.35;
+
+      // Ambil detik lagu audio2.mp3 tersimpan & status mute
+      const savedPos1Time = parseFloat(localStorage.getItem('jelita_pos1_bgm_time') || 0);
+      const isMuted = localStorage.getItem('jelita_bgm_muted') === 'true';
+
+      function playMusic() {
+        if (!isMuted) {
+          if (savedPos1Time > 0) {
+            try { bgMusic.currentTime = savedPos1Time; } catch(e){}
+          }
+          bgMusic.play().catch(() => {
+            const unlock = () => {
+              bgMusic.play();
+              document.removeEventListener('click', unlock);
+              document.removeEventListener('touchstart', unlock);
+            };
+            document.addEventListener('click', unlock);
+            document.addEventListener('touchstart', unlock);
+          });
+        }
+      }
+
+      if (bgMusic.readyState >= 1) {
+        playMusic();
+      } else {
+        bgMusic.addEventListener('loadedmetadata', playMusic, { once: true });
+      }
+
+      // Rekam detik lagu audio2.mp3 secara terus-menerus
+      bgMusic.addEventListener('timeupdate', () => {
+        if (!bgMusic.paused && bgMusic.currentTime > 0) {
+          localStorage.setItem('jelita_pos1_bgm_time', bgMusic.currentTime.toString());
+        }
+      });
+
+      // Kontrol Suara (Sound & Pause)
+      if (btnSound) {
+        btnSound.addEventListener('click', () => {
+          localStorage.setItem('jelita_bgm_muted', 'false');
+          bgMusic.play();
+        });
+      }
+
+      if (btnPause) {
+        btnPause.addEventListener('click', () => {
+          localStorage.setItem('jelita_bgm_muted', 'true');
+          bgMusic.pause();
+        });
+      }
+
+      // Navigasi Tombol Home -> menu.html
+      if (btnHome) {
+        btnHome.addEventListener('click', (e) => {
+          e.preventDefault();
+          localStorage.removeItem('jelita_pos1_bgm_time');
+          window.location.href = 'menu.html';
+        });
+      }
+
+      // Navigasi Tombol Back -> map.html
+      if (btnBack) {
+        btnBack.addEventListener('click', (e) => {
+          e.preventDefault();
+          localStorage.removeItem('jelita_pos1_bgm_time');
+          window.location.href = 'map.html';
+        });
+      }
+
+      // Navigasi Tombol Siap Raka -> pos1.html
+      if (btnSiapRaka) {
+        btnSiapRaka.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (!bgMusic.paused) {
+            localStorage.setItem('jelita_pos1_bgm_time', bgMusic.currentTime.toString());
+          }
+          window.location.href = 'pos1.html';
+        });
+      }
+    });
+  </script>
+</body>
+</html>

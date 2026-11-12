@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JELITA - Puncak Ekspedisi Kahyangan</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="prefetch" href="menu.html">
+  <link rel="prefetch" href="index.html">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      background-color: #1b5e20;
+    }
+
+    .finish-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background: #2e7d32 url('assets/images/finish.png') no-repeat center center;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      padding-bottom: 75px;
+    }
+
+    /* LOGO JELITA (POJOK KIRI ATAS) */
+    .brand-logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      height: 65px;
+      width: auto;
+      z-index: 100;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+    }
+
+    /* KONTROL NAVIGASI (POJOK KANAN ATAS) */
+    .top-nav-group {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-icon-btn {
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+    }
+
+    .nav-icon-btn:hover { transform: scale(1.1); }
+
+    /* LOGO IPA (POJOK KANAN BAWAH) */
+    .ipa-logo {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      height: 65px;
+      width: auto;
+      z-index: 100;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+    }
+
+    /* TEKS ATRIBUSI (POJOK KIRI BAWAH) */
+    .attribution-text {
+      position: absolute;
+      bottom: 15px;
+      left: 20px;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 600;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+
+    /* KARTU HASIL AKHIR ESTETIK & MEWAH */
+    .result-card {
+      width: 88%;
+      max-width: 580px;
+      background: linear-gradient(135deg, rgba(255, 248, 225, 0.97), rgba(255, 236, 179, 0.97));
+      border: 5px solid #8d6e63;
+      border-radius: 28px;
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.65), inset 0 0 15px rgba(255, 215, 0, 0.3);
+      backdrop-filter: blur(6px);
+      z-index: 10;
+    }
+
+    .result-title {
+      font-size: clamp(12px, 1.3vw, 14px);
+      font-weight: 800;
+      color: #6d4c41;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 2px;
+    }
+
+    .player-name-big {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 900;
+      color: #b71c1c;
+      text-transform: uppercase;
+      margin: 2px 0 8px 0;
+      letter-spacing: 1.5px;
+      text-shadow: 2px 2px 0px rgba(255,255,255,0.9), 0 0 10px rgba(183, 28, 28, 0.2);
+    }
+
+    /* PITA GELAR MERAH BINGKAI KEEMASAN */
+    .title-badge-royal {
+      background: linear-gradient(135deg, #c62828 0%, #8e0000 50%, #b71c1c 100%);
+      color: #fffde7;
+      font-size: clamp(13px, 1.5vw, 17px);
+      font-weight: 900;
+      padding: 8px 22px;
+      border-radius: 30px;
+      border: 3px solid #ffd700;
+      box-shadow: 0 6px 16px rgba(183, 28, 28, 0.45), 0 0 12px rgba(255, 215, 0, 0.6);
+      margin-bottom: 20px;
+      text-shadow: 1px 1.5px 2px rgba(0, 0, 0, 0.6);
+      letter-spacing: 0.8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* GRID REKAP SKOR */
+    .stats-container {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      background: linear-gradient(180deg, #fffde7 0%, #fff8e1 100%);
+      border: 2px solid #d7ccc8;
+      border-radius: 18px;
+      padding: 12px 8px;
+      margin-bottom: 20px;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+    }
+
+    .stat-item:not(:last-child) {
+      border-right: 2px dashed #d7ccc8;
+    }
+
+    .stat-val {
+      font-size: clamp(17px, 2.2vw, 24px);
+      font-weight: 900;
+      color: #1b5e20;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+    }
+
+    .stat-lbl {
+      font-size: clamp(10px, 1vw, 12px);
+      font-weight: 700;
+      color: #5d4037;
+      margin-top: 3px;
+    }
+
+    .action-btn-group {
+      display: flex;
+      gap: 16px;
+    }
+
+    .btn-action {
+      padding: 10px 26px;
+      font-size: clamp(13px, 1.3vw, 15px);
+      font-weight: 800;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 5px 14px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      color: #fff;
+    }
+
+    .btn-action:hover {
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+    }
+
+    .btn-restart {
+      background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+      border: 1.5px solid #ffe082;
+    }
+
+    .btn-exit {
+      background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
+      border: 1.5px solid #ffcdd2;
+    }
+  </style>
+</head>
+<body>
+
+  <img src="assets/images/jelita.png" alt="JELITA Logo" class="brand-logo">
+
+  <div class="top-nav-group">
+    <img src="assets/images/home.png" alt="Menu Utama" class="nav-icon-btn" onclick="exitToMenu()" title="Kembali ke Menu Utama">
+    <img src="assets/images/sound.png" id="soundBtnIcon" alt="Sound" class="nav-icon-btn" onclick="toggleAudio()" title="Putar/Matikan Suara">
+    <img src="assets/images/pause.png" alt="Pause" class="nav-icon-btn" onclick="pauseAudio()" title="Jeda Audio">
+  </div>
+
+  <img src="assets/images/ipa.png" alt="IPA Logo" class="ipa-logo">
+
+  <div class="attribution-text">
+    Visual: DALL-E | Audio: Pixabay (Free Royalty)
+  </div>
+
+  <audio id="bgMusic" loop preload="auto">
+    <source src="assets/audio/audio5.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="finish-container">
+    <div class="result-card">
+      <div class="result-title">Selamat Atas Keberhasilan</div>
+      <div class="player-name-big" id="displayPlayerName">PETUALANG</div>
+      
+      <div class="title-badge-royal">
+        <span>🍃</span> DUTA PELINDUNG WANA KAHYANGAN <span>🍃</span>
+      </div>
+
+      <div class="stats-container">
+        <div class="stat-item">
+          <span class="stat-val" id="valStars">0 / 62</span>
+          <span class="stat-lbl">⭐ Total Bintang</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val" id="valLives">0 / 9</span>
+          <span class="stat-lbl">❤️ Sisa Nyawa</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val" id="valTime">0s</span>
+          <span class="stat-lbl">⏱️ Sisa Waktu</span>
+        </div>
+      </div>
+
+      <div class="action-btn-group">
+        <button class="btn-action btn-restart" onclick="restartGame()">🔄 Main Lagi</button>
+        <button class="btn-action btn-exit" onclick="exitToMenu()">🚪 Keluar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.onload = function() {
+      initAudio();
+      displayFinalStats();
+    };
+
+    function initAudio() {
+      var audio = document.getElementById('bgMusic');
+      if (!audio) return;
+      audio.volume = 0.5;
+      var playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(function() {
+          window.addEventListener('click', function unlock() {
+            audio.play();
+            window.removeEventListener('click', unlock);
+          }, { once: true });
+        });
+      }
+    }
+
+    function toggleAudio() {
+      var audio = document.getElementById('bgMusic');
+      if (audio.paused) audio.play();
+      else audio.pause();
+    }
+
+    function pauseAudio() {
+      var audio = document.getElementById('bgMusic');
+      if (audio) audio.pause();
+    }
+
+    /* FUNGSI PENGECEKAN WAKTU LENGKAP & SERBAGUNA */
+    function displayFinalStats() {
+      var name = localStorage.getItem('jelita_player_name') || 'Petualang';
+      document.getElementById('displayPlayerName').innerText = name;
+
+      // 1. HITUNG SKOR BINTANG
+      var score1 = parseInt(localStorage.getItem('jelita_score_pos1') || '0');
+      var stars1 = parseInt(localStorage.getItem('jelita_stars_pos1') || '0');
+      var score2 = parseInt(localStorage.getItem('jelita_score_pos2') || '0');
+      var stars2 = parseInt(localStorage.getItem('jelita_stars_pos2') || '0');
+      var score3 = parseInt(localStorage.getItem('jelita_score_pos3') || '0');
+      var stars3 = parseInt(localStorage.getItem('jelita_stars_pos3') || '0');
+
+      var totalStars = (score1 + stars1) + (score2 + stars2) + (score3 + stars3);
+
+      // 2. HITUNG SISA NYAWA
+      var lives1 = parseInt(localStorage.getItem('jelita_pos1_lives') || '3');
+      var lives2 = parseInt(localStorage.getItem('jelita_pos2_lives') || '3');
+      var lives3 = parseInt(localStorage.getItem('jelita_pos3_lives') || '3');
+      var totalLives = lives1 + lives2 + lives3;
+
+      // 3. HITUNG SISA WAKTU (Mengecek fleksibel berbagai nama variabel lokal yang mungkin digunakan di Pos 1, 2, & 3)
+      var time1 = parseInt(
+        localStorage.getItem('jelita_time_pos1') || 
+        localStorage.getItem('jelita_pos1_time') || 
+        localStorage.getItem('jelita_time_left_pos1') || '0'
+      );
+
+      var time2 = parseInt(
+        localStorage.getItem('jelita_time_pos2') || 
+        localStorage.getItem('jelita_pos2_time') || 
+        localStorage.getItem('jelita_time_left_pos2') || '0'
+      );
+
+      var time3 = parseInt(
+        localStorage.getItem('jelita_time_pos3') || 
+        localStorage.getItem('jelita_pos3_time') || 
+        localStorage.getItem('jelita_time_left_pos3') || 
+        localStorage.getItem('jelita_timer_pos3') || '0'
+      );
+
+      var totalTimeRemaining = time1 + time2 + time3;
+
+      // TAMPILKAN KE LAYAR
+      document.getElementById('valStars').innerText = totalStars + ' / 62';
+      document.getElementById('valLives').innerText = totalLives + ' / 9';
+      document.getElementById('valTime').innerText = totalTimeRemaining + 's';
+    }
+
+    function restartGame() {
+      try {
+        localStorage.removeItem('jelita_score_pos1');
+        localStorage.removeItem('jelita_score_pos2');
+        localStorage.removeItem('jelita_score_pos3');
+        localStorage.removeItem('jelita_pos3_lives');
+        sessionStorage.clear();
+      } catch(e) {}
+      window.location.href = 'name.html';
+    }
+
+    function exitToMenu() {
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

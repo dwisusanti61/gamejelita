@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JELITA - Menu Utama</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="prefetch" href="map.html">
+  <link rel="prefetch" href="name.html">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    html, body { width: 100vw; height: 100vh; overflow: hidden; background-color: #2e7d32; font-family: 'Segoe UI', Roboto, sans-serif; }
+    .game-wrapper { position: relative; width: 100vw; height: 100vh; background: #2e7d32 url('assets/images/menu.png') no-repeat center center; background-size: cover; }
+
+    .logo-jelita-top { position: absolute; top: 3%; left: 2%; height: min(13vw, 70px); z-index: 1000; pointer-events: none; }
+    
+    .top-right-controls { position: absolute; top: 3.5%; right: 3%; display: flex; gap: 10px; z-index: 1000; }
+    .top-right-controls button { background: none; border: none; cursor: pointer; outline: none; transition: transform 0.2s; }
+    .top-right-controls button:hover { transform: scale(1.1); }
+    .top-right-controls img { height: min(8vw, 55px); }
+
+    .btn-action { position: absolute; background: none; border: none; cursor: pointer; outline: none; z-index: 1000; transition: transform 0.2s; }
+    .btn-action:hover { transform: scale(1.1); }
+    .btn-back { bottom: 4%; left: 3%; }
+    .btn-back img { height: min(15vw, 90px); }
+    .btn-jelajah { bottom: 4%; right: 3%; }
+    .btn-jelajah img { height: min(16vw, 100px); }
+  </style>
+</head>
+<body>
+  <div class="game-wrapper">
+    <img src="assets/images/jelita.png" alt="Logo JELITA" class="logo-jelita-top">
+
+    <audio id="bgMusic" loop preload="auto">
+      <source src="assets/audio/audio1.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="top-right-controls">
+      <button id="btnSound" title="Nyalakan Suara"><img src="assets/images/sound.png" alt="Sound"></button>
+      <button id="btnPause" title="Matikan Suara"><img src="assets/images/pause.png" alt="Pause"></button>
+    </div>
+
+    <button class="btn-action btn-back" id="btnBack" title="Kembali"><img src="assets/images/back.png" alt="Kembali"></button>
+    <button class="btn-action btn-jelajah" id="btnJelajah" title="Petualangan Peta"><img src="assets/images/jelajah.png" alt="Jelajah"></button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const bgMusic = document.getElementById('bgMusic');
+      const btnSound = document.getElementById('btnSound');
+      const btnPause = document.getElementById('btnPause');
+      const btnBack = document.getElementById('btnBack');
+      const btnJelajah = document.getElementById('btnJelajah');
+
+      bgMusic.volume = 0.35;
+
+      const savedTime = parseFloat(localStorage.getItem('jelita_bgm_time') || 0);
+      const isMuted = localStorage.getItem('jelita_bgm_muted') === 'true';
+
+      function playMusic() {
+        if (!isMuted) {
+          if (savedTime > 0) {
+            try { bgMusic.currentTime = savedTime; } catch(e){}
+          }
+          bgMusic.play().catch(() => {
+            const unlock = () => {
+              bgMusic.play();
+              document.removeEventListener('click', unlock);
+              document.removeEventListener('touchstart', unlock);
+            };
+            document.addEventListener('click', unlock);
+            document.addEventListener('touchstart', unlock);
+          });
+        }
+      }
+
+      if (bgMusic.readyState >= 1) {
+        playMusic();
+      } else {
+        bgMusic.addEventListener('loadedmetadata', playMusic, { once: true });
+      }
+
+      bgMusic.addEventListener('timeupdate', () => {
+        if (!bgMusic.paused && bgMusic.currentTime > 0) {
+          localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString());
+        }
+      });
+
+      if (btnSound) {
+        btnSound.addEventListener('click', () => {
+          localStorage.setItem('jelita_bgm_muted', 'false');
+          bgMusic.play();
+        });
+      }
+
+      if (btnPause) {
+        btnPause.addEventListener('click', () => {
+          localStorage.setItem('jelita_bgm_muted', 'true');
+          bgMusic.pause();
+        });
+      }
+
+      if (btnBack) {
+        btnBack.addEventListener('click', () => {
+          if (!bgMusic.paused) localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString());
+          window.location.href = 'name.html';
+        });
+      }
+
+      if (btnJelajah) {
+        btnJelajah.addEventListener('click', () => {
+          if (!bgMusic.paused) localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString());
+          window.location.href = 'map.html';
+        });
+      }
+    });
+  </script>
+</body>
+</html>

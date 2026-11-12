@@ -1,0 +1,16 @@
+{
+  "name": "JELITA - Petualangan Ekologi",
+  "short_name": "JELITA",
+  "start_url": "index.html",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#1b5e20",
+  "theme_color": "#1b5e20",
+  "icons": [
+    {
+      "src": "assets/images/jelita.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
