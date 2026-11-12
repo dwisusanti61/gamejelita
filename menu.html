@@ -2,32 +2,42 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>JELITA - Menu Utama</title>
   <link rel="manifest" href="manifest.json">
   <link rel="prefetch" href="map.html">
   <link rel="prefetch" href="name.html">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
-    html, body { width: 100vw; height: 100vh; overflow: hidden; background-color: #2e7d32; font-family: 'Segoe UI', Roboto, sans-serif; }
-    .game-wrapper { position: relative; width: 100vw; height: 100vh; background: #2e7d32 url('assets/images/menu.png') no-repeat center center; background-size: cover; }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    html, body { width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; background-color: #2e7d32; font-family: 'Segoe UI', Roboto, sans-serif; }
+    .game-wrapper { position: relative; width: 100%; height: 100%; background: #2e7d32 url('assets/images/menu.png') no-repeat center center; background-size: cover; }
 
-    .logo-jelita-top { position: absolute; top: 3%; left: 2%; height: min(13vw, 70px); z-index: 1000; pointer-events: none; }
+    .logo-jelita-top { position: absolute; top: 3.5%; left: 2.5%; height: 13dvh; max-height: 70px; width: auto; z-index: 1000; pointer-events: none; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.4)); }
     
-    .top-right-controls { position: absolute; top: 3.5%; right: 3%; display: flex; gap: 10px; z-index: 1000; }
+    .top-right-controls { position: absolute; top: 3.5%; right: 3%; display: flex; gap: 1.5dvh; z-index: 1000; }
     .top-right-controls button { background: none; border: none; cursor: pointer; outline: none; transition: transform 0.2s; }
     .top-right-controls button:hover { transform: scale(1.1); }
-    .top-right-controls img { height: min(8vw, 55px); }
+    .top-right-controls img { height: 10dvh; max-height: 55px; width: auto; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.4)); }
 
     .btn-action { position: absolute; background: none; border: none; cursor: pointer; outline: none; z-index: 1000; transition: transform 0.2s; }
     .btn-action:hover { transform: scale(1.1); }
-    .btn-back { bottom: 4%; left: 3%; }
-    .btn-back img { height: min(15vw, 90px); }
-    .btn-jelajah { bottom: 4%; right: 3%; }
-    .btn-jelajah img { height: min(16vw, 100px); }
+    .btn-back { bottom: 4.5%; left: 3%; }
+    .btn-back img { height: 15dvh; max-height: 90px; width: auto; filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.5)); }
+    .btn-jelajah { bottom: 4.5%; right: 3%; }
+    .btn-jelajah img { height: 16dvh; max-height: 100px; width: auto; filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.5)); }
+
+    #rotate-warning { display: none; position: fixed; inset: 0; background: #1b5e20; color: #ffffff; z-index: 99999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+    @media screen and (orientation: portrait) { #rotate-warning { display: flex; } }
   </style>
 </head>
 <body>
+
+  <div id="rotate-warning">
+    <div style="font-size: 56px; margin-bottom: 12px;">📱🔄</div>
+    <h2>Putar Layar HP Kamu</h2>
+    <p style="margin-top: 8px; font-size: 14px; opacity: 0.9;">Miringkan HP ke posisi mendatar (Landscape) agar game tampil penuh dan rapi.</p>
+  </div>
+
   <div class="game-wrapper">
     <img src="assets/images/jelita.png" alt="Logo JELITA" class="logo-jelita-top">
 
@@ -45,6 +55,17 @@
   </div>
 
   <script>
+    function masukFullScreen() {
+      const elem = document.documentElement;
+      if (!document.fullscreenElement && elem.requestFullscreen) {
+        elem.requestFullscreen().catch(() => {});
+      } else if (!document.webkitFullscreenElement && elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      }
+    }
+    document.addEventListener('touchstart', masukFullScreen, { once: true });
+    document.addEventListener('click', masukFullScreen, { once: true });
+
     document.addEventListener('DOMContentLoaded', () => {
       const bgMusic = document.getElementById('bgMusic');
       const btnSound = document.getElementById('btnSound');
@@ -53,7 +74,6 @@
       const btnJelajah = document.getElementById('btnJelajah');
 
       bgMusic.volume = 0.35;
-
       const savedTime = parseFloat(localStorage.getItem('jelita_bgm_time') || 0);
       const isMuted = localStorage.getItem('jelita_bgm_muted') === 'true';
 
@@ -74,11 +94,8 @@
         }
       }
 
-      if (bgMusic.readyState >= 1) {
-        playMusic();
-      } else {
-        bgMusic.addEventListener('loadedmetadata', playMusic, { once: true });
-      }
+      if (bgMusic.readyState >= 1) playMusic();
+      else bgMusic.addEventListener('loadedmetadata', playMusic, { once: true });
 
       bgMusic.addEventListener('timeupdate', () => {
         if (!bgMusic.paused && bgMusic.currentTime > 0) {
@@ -86,33 +103,10 @@
         }
       });
 
-      if (btnSound) {
-        btnSound.addEventListener('click', () => {
-          localStorage.setItem('jelita_bgm_muted', 'false');
-          bgMusic.play();
-        });
-      }
-
-      if (btnPause) {
-        btnPause.addEventListener('click', () => {
-          localStorage.setItem('jelita_bgm_muted', 'true');
-          bgMusic.pause();
-        });
-      }
-
-      if (btnBack) {
-        btnBack.addEventListener('click', () => {
-          if (!bgMusic.paused) localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString());
-          window.location.href = 'name.html';
-        });
-      }
-
-      if (btnJelajah) {
-        btnJelajah.addEventListener('click', () => {
-          if (!bgMusic.paused) localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString());
-          window.location.href = 'map.html';
-        });
-      }
+      if (btnSound) btnSound.addEventListener('click', () => { localStorage.setItem('jelita_bgm_muted', 'false'); bgMusic.play(); });
+      if (btnPause) btnPause.addEventListener('click', () => { localStorage.setItem('jelita_bgm_muted', 'true'); bgMusic.pause(); });
+      if (btnBack) btnBack.addEventListener('click', () => { if (!bgMusic.paused) localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString()); window.location.href = 'name.html'; });
+      if (btnJelajah) btnJelajah.addEventListener('click', () => { if (!bgMusic.paused) localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString()); window.location.href = 'map.html'; });
     });
   </script>
 </body>
