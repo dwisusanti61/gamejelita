@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>JELITA - Splash Screen</title>
   <link rel="manifest" href="manifest.json">
   <link rel="prefetch" href="name.html">
@@ -52,7 +55,7 @@
       cursor: pointer; 
       outline: none; 
       z-index: 1000; 
-      transition: transform 0.2s ease, filter 0.2s ease; 
+      transition: transform 0.15s ease, filter 0.15s ease; 
       display: flex; 
       align-items: center; 
       justify-content: center; 
@@ -84,12 +87,67 @@
       #rotate-warning { display: flex; }
     }
 
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
-    .modal-content { position: relative; width: min(85vw, 540px); background: #ffffff; border: 5px solid #fbc02d; border-radius: 20px; padding: 18px 20px; box-shadow: 0 12px 35px rgba(0,0,0,0.6); text-align: center; color: #212121; }
-    .modal-title { font-size: clamp(16px, 4dvh, 22px); font-weight: 800; color: #1b5e20; margin-bottom: 10px; text-transform: uppercase; }
-    .modal-body-card { background: #fefde8; border: 2px dashed #fbc02d; border-radius: 14px; padding: 12px; font-size: clamp(13px, 3.2dvh, 16px); line-height: 1.5; color: #1a252c; text-align: left; max-height: 52dvh; overflow-y: auto; font-weight: 500; }
-    .modal-body-card p { margin-bottom: 8px; }
-    .btn-close-modal { margin-top: 12px; padding: 10px 30px; background: #2e7d32; color: #ffffff; font-size: clamp(14px, 3.5dvh, 17px); font-weight: bold; border: none; border-radius: 14px; cursor: pointer; }
+    /* Perbaikan Modal Petunjuk: Cepat (tanpa blur berat) & tombol tidak pernah tertutup di layar pendek */
+    .modal-overlay { 
+      display: none; 
+      position: fixed; 
+      inset: 0; 
+      background: rgba(0, 0, 0, 0.8); 
+      z-index: 9999; 
+      justify-content: center; 
+      align-items: center; 
+      padding: 12px;
+    }
+    .modal-content { 
+      position: relative; 
+      width: min(88vw, 540px); 
+      max-height: 88dvh;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff; 
+      border: 4px solid #fbc02d; 
+      border-radius: 18px; 
+      padding: 14px 18px; 
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6); 
+      text-align: center; 
+      color: #212121; 
+    }
+    .modal-title { 
+      font-size: clamp(15px, 3.8dvh, 21px); 
+      font-weight: 800; 
+      color: #1b5e20; 
+      margin-bottom: 8px; 
+      text-transform: uppercase; 
+      flex-shrink: 0;
+    }
+    .modal-body-card { 
+      background: #fefde8; 
+      border: 2px dashed #fbc02d; 
+      border-radius: 12px; 
+      padding: 10px 12px; 
+      font-size: clamp(12px, 3.1dvh, 15px); 
+      line-height: 1.45; 
+      color: #1a252c; 
+      text-align: left; 
+      overflow-y: auto; 
+      flex: 1;
+      font-weight: 500; 
+    }
+    .modal-body-card p { margin-bottom: 6px; }
+    .modal-body-card p:last-child { margin-bottom: 0; }
+    .btn-close-modal { 
+      margin-top: 10px; 
+      padding: 8px 28px; 
+      background: #2e7d32; 
+      color: #ffffff; 
+      font-size: clamp(13px, 3.4dvh, 16px); 
+      font-weight: bold; 
+      border: none; 
+      border-radius: 12px; 
+      cursor: pointer; 
+      flex-shrink: 0;
+      align-self: center;
+    }
   </style>
 </head>
 <body>
@@ -133,7 +191,7 @@
   </div>
 
   <script>
-    // Otomatis masuk mode Full Screen (hilangkan UI bar Chrome) saat layar pertama kali disentuh di HP
+    // Otomatis masuk mode Full Screen saat layar pertama kali disentuh di HP
     function masukFullScreen() {
       const elem = document.documentElement;
       if (!document.fullscreenElement && elem.requestFullscreen) {

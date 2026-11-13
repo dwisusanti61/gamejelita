@@ -2,162 +2,76 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>JELITA - Pos 2: Kedung Pasiraman</title>
   <link rel="manifest" href="manifest.json">
   <link rel="prefetch" href="pos2.html">
   <link rel="prefetch" href="menu.html">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-      -webkit-user-select: none;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    html, body { width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; background-color: #00796b; font-family: 'Segoe UI', Roboto, sans-serif; }
+    .game-wrapper { position: relative; width: 100%; height: 100%; background: #00796b url('assets/images/pos02.png') no-repeat center center; background-size: 100% 100%; }
 
-    html, body {
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      background-color: #00796b;
-      font-family: 'Segoe UI', Roboto, sans-serif;
-    }
+    .logo-jelita-top { position: absolute; top: 3.5%; left: 2.5%; height: 13dvh; max-height: 70px; width: auto; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.4)); pointer-events: none; z-index: 1000; }
 
-    /* Fullscreen Wrapper Latar pos02.png */
-    .game-wrapper {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      background: #00796b url('assets/images/pos02.png') no-repeat center center;
-      background-size: cover;
-    }
+    .btn-action { position: absolute; background: none; border: none; cursor: pointer; outline: none; z-index: 1000; transition: transform 0.15s ease, filter 0.15s ease; pointer-events: auto; }
+    .btn-action:hover { transform: scale(1.1); filter: brightness(1.1); }
+    .btn-action:active { transform: scale(0.92); }
 
-    /* Logo JELITA di Pojok Kiri Atas */
-    .logo-jelita-top {
-      position: absolute;
-      top: 3%;
-      left: 2%;
-      height: min(13vw, 70px);
-      width: auto;
-      filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.4));
-      pointer-events: none;
-      z-index: 1000;
-    }
+    .top-right-controls { position: absolute; top: 3.5%; right: 3%; display: flex; align-items: center; gap: 1.5dvh; z-index: 1000; }
+    .top-right-controls button { background: none; border: none; cursor: pointer; outline: none; transition: transform 0.15s ease, filter 0.15s ease; pointer-events: auto; }
+    .top-right-controls button:hover { transform: scale(1.1); filter: brightness(1.1); }
+    .top-right-controls button:active { transform: scale(0.92); }
+    .top-right-controls img { height: 10dvh; max-height: 55px; width: auto; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.4)); }
 
-    /* Style Tombol Aksi Universal */
-    .btn-action {
-      position: absolute;
-      background: none;
-      border: none;
-      cursor: pointer;
-      outline: none;
-      z-index: 1000;
-      transition: transform 0.2s ease, filter 0.2s ease;
-      pointer-events: auto;
-    }
+    .btn-siapnadia { bottom: 4.5%; right: 3%; }
+    .btn-siapnadia img { height: 16dvh; max-height: 100px; width: auto; filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.5)); }
 
-    .btn-action:hover {
-      transform: scale(1.1);
-      filter: brightness(1.1);
-    }
-
-    .btn-action:active {
-      transform: scale(0.92);
-    }
-
-    /* Group 3 Tombol Pojok Kanan Atas: Home, Sound, Pause */
-    .top-right-controls {
-      position: absolute;
-      top: 3.5%;
-      right: 3%;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 1000;
-    }
-
-    .top-right-controls button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      outline: none;
-      transition: transform 0.2s ease, filter 0.2s ease;
-      pointer-events: auto;
-    }
-
-    .top-right-controls button:hover {
-      transform: scale(1.1);
-      filter: brightness(1.1);
-    }
-
-    .top-right-controls button:active {
-      transform: scale(0.92);
-    }
-
-    .top-right-controls img {
-      height: min(8vw, 55px);
-      width: auto;
-      filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.4));
-    }
-
-    /* Tombol Siap Nadia di Kanan Bawah */
-    .btn-siapnadia {
-      bottom: 4%;
-      right: 3%;
-    }
-
-    .btn-siapnadia img {
-      height: min(16vw, 100px);
-      width: auto;
-      filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.5));
-    }
-
-    /* Penyesuaian HP Landscape */
-    @media (max-height: 500px) {
-      .logo-jelita-top {
-        height: 45px;
-      }
-      .top-right-controls img {
-        height: 40px;
-      }
-      .btn-siapnadia img {
-        height: min(20vw, 75px);
-      }
-    }
+    #rotate-warning { display: none; position: fixed; inset: 0; background: #1b5e20; color: #ffffff; z-index: 99999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+    @media screen and (orientation: portrait) { #rotate-warning { display: flex; } }
   </style>
 </head>
 <body>
 
+  <div id="rotate-warning">
+    <div style="font-size: 56px; margin-bottom: 12px;">📱🔄</div>
+    <h2>Putar Layar HP Kamu</h2>
+    <p style="margin-top: 8px; font-size: 14px; opacity: 0.9;">Miringkan HP ke posisi mendatar (Landscape) agar game tampil penuh dan rapi.</p>
+  </div>
+
   <div class="game-wrapper">
-    <!-- Logo JELITA Pojok Kiri Atas -->
     <img src="assets/images/jelita.png" alt="Logo JELITA" class="logo-jelita-top">
 
-    <!-- Audio Lokal Pos 2 (audio3.mp3) -->
     <audio id="bgMusic" loop preload="auto">
       <source src="assets/audio/audio3.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Group 3 Tombol Kanan Atas (Home, Sound, Pause) -->
     <div class="top-right-controls">
-      <button id="btnHome" title="Kembali ke Menu Utama">
-        <img src="assets/images/home.png" alt="Home">
-      </button>
-      <button id="btnSound" title="Nyalakan Suara">
-        <img src="assets/images/sound.png" alt="Sound">
-      </button>
-      <button id="btnPause" title="Matikan Suara">
-        <img src="assets/images/pause.png" alt="Pause">
-      </button>
+      <button id="btnHome" title="Kembali ke Menu Utama"><img src="assets/images/home.png" alt="Home"></button>
+      <button id="btnSound" title="Nyalakan Suara"><img src="assets/images/sound.png" alt="Sound"></button>
+      <button id="btnPause" title="Matikan Suara"><img src="assets/images/pause.png" alt="Pause"></button>
     </div>
 
-    <!-- Tombol Siap Nadia (Kanan Bawah -> pos2.html) -->
     <button class="btn-action btn-siapnadia" id="btnSiapNadia" title="Siap, Nadia!">
       <img src="assets/images/siapnadia.png" alt="Siap, Nadia!">
     </button>
   </div>
 
   <script>
+    function masukFullScreen() {
+      var elem = document.documentElement;
+      if (!document.fullscreenElement && elem.requestFullscreen) {
+        elem.requestFullscreen().catch(function() {});
+      } else if (!document.webkitFullscreenElement && elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      }
+    }
+    document.addEventListener('touchstart', masukFullScreen, { once: true });
+    document.addEventListener('click', masukFullScreen, { once: true });
+
     document.addEventListener('DOMContentLoaded', function() {
       var btnHome = document.getElementById('btnHome');
       var btnSound = document.getElementById('btnSound');
@@ -167,7 +81,6 @@
 
       bgMusic.volume = 0.35;
 
-      // Ambil detik tersimpan audio3.mp3 & status mute
       var savedPos2Time = parseFloat(localStorage.getItem('jelita_pos2_bgm_time') || 0);
       var isMuted = localStorage.getItem('jelita_bgm_muted') === 'true';
 
@@ -194,14 +107,12 @@
         bgMusic.addEventListener('loadedmetadata', playMusic, { once: true });
       }
 
-      // Catat detik lagu audio3.mp3 secara berkala
       bgMusic.addEventListener('timeupdate', function() {
         if (!bgMusic.paused && bgMusic.currentTime > 0) {
           localStorage.setItem('jelita_pos2_bgm_time', bgMusic.currentTime.toString());
         }
       });
 
-      // Kontrol Suara (Sound & Pause)
       if (btnSound) {
         btnSound.addEventListener('click', function() {
           localStorage.setItem('jelita_bgm_muted', 'false');
@@ -216,19 +127,19 @@
         });
       }
 
-      // Navigasi Home -> Reset Audio Pos 2 -> Kembali ke menu.html
       if (btnHome) {
         btnHome.addEventListener('click', function(e) {
           e.preventDefault();
+          masukFullScreen();
           localStorage.removeItem('jelita_pos2_bgm_time');
           window.location.href = 'menu.html';
         });
       }
 
-      // Navigasi Siap Nadia -> Lanjut ke pos2.html (audio3.mp3 tetap berlanjut tanpa terputus)
       if (btnSiapNadia) {
         btnSiapNadia.addEventListener('click', function(e) {
           e.preventDefault();
+          masukFullScreen();
           if (!bgMusic.paused) {
             localStorage.setItem('jelita_pos2_bgm_time', bgMusic.currentTime.toString());
           }

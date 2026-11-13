@@ -2,225 +2,59 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>JELITA - Puncak Ekspedisi Kahyangan</title>
   <link rel="manifest" href="manifest.json">
   <link rel="prefetch" href="menu.html">
   <link rel="prefetch" href="index.html">
-
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-      -webkit-user-select: none;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    html, body { width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; font-family: 'Segoe UI', Roboto, sans-serif; background-color: #1b5e20; }
 
-    html, body {
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      font-family: 'Segoe UI', Roboto, sans-serif;
-      background-color: #1b5e20;
-    }
+    .finish-container { position: relative; width: 100%; height: 100%; background: #2e7d32 url('assets/images/finish.png') no-repeat center center; background-size: 100% 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px; }
 
-    .finish-container {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      background: #2e7d32 url('assets/images/finish.png') no-repeat center center;
-      background-size: cover;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      align-items: center;
-      padding-bottom: 75px;
-    }
+    .brand-logo { position: absolute; top: 3.5%; left: 2.5%; height: 13dvh; max-height: 65px; width: auto; z-index: 100; pointer-events: none; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); }
 
-    /* LOGO JELITA (POJOK KIRI ATAS) */
-    .brand-logo {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      height: 65px;
-      width: auto;
-      z-index: 100;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
-    }
-
-    /* KONTROL NAVIGASI (POJOK KANAN ATAS) */
-    .top-nav-group {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      z-index: 100;
-    }
-
-    .nav-icon-btn {
-      width: 50px;
-      height: 50px;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
-    }
-
+    .top-nav-group { position: absolute; top: 3.5%; right: 3%; display: flex; gap: 1.5dvh; align-items: center; z-index: 100; }
+    .nav-icon-btn { height: 10dvh; max-height: 50px; width: auto; cursor: pointer; transition: transform 0.15s ease; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); }
     .nav-icon-btn:hover { transform: scale(1.1); }
 
-    /* LOGO IPA (POJOK KANAN BAWAH) */
-    .ipa-logo {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      height: 65px;
-      width: auto;
-      z-index: 100;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
-    }
+    .ipa-logo { position: absolute; bottom: 3.5%; right: 2.5%; height: 13dvh; max-height: 65px; width: auto; z-index: 100; pointer-events: none; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); }
 
-    /* TEKS ATRIBUSI (POJOK KIRI BAWAH) */
-    .attribution-text {
-      position: absolute;
-      bottom: 15px;
-      left: 20px;
-      color: #ffffff;
-      font-size: 11px;
-      font-weight: 600;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-      z-index: 100;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 4px 10px;
-      border-radius: 12px;
-    }
+    .attribution-text { position: absolute; bottom: 3%; left: 2.5%; color: #ffffff; font-size: clamp(9px, 2.2dvh, 11px); font-weight: 600; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); z-index: 100; background: rgba(0, 0, 0, 0.45); padding: 4px 10px; border-radius: 12px; }
 
-    /* KARTU HASIL AKHIR ESTETIK & MEWAH */
-    .result-card {
-      width: 88%;
-      max-width: 580px;
-      background: linear-gradient(135deg, rgba(255, 248, 225, 0.97), rgba(255, 236, 179, 0.97));
-      border: 5px solid #8d6e63;
-      border-radius: 28px;
-      padding: 22px 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      box-shadow: 0 16px 36px rgba(0,0,0,0.65), inset 0 0 15px rgba(255, 215, 0, 0.3);
-      backdrop-filter: blur(6px);
-      z-index: 10;
-    }
+    .result-card { width: min(76vw, 560px); max-height: 84dvh; background: linear-gradient(135deg, rgba(255, 248, 225, 0.97), rgba(255, 236, 179, 0.97)); border: 4px solid #8d6e63; border-radius: 24px; padding: 2.5dvh 22px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; box-shadow: 0 12px 30px rgba(0,0,0,0.65), inset 0 0 15px rgba(255, 215, 0, 0.3); z-index: 10; }
+    .result-title { font-size: clamp(11px, 2.5dvh, 14px); font-weight: 800; color: #6d4c41; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 2px; }
+    .player-name-big { font-size: clamp(22px, 6.5dvh, 40px); font-weight: 900; color: #b71c1c; text-transform: uppercase; margin: 2px 0 1dvh 0; letter-spacing: 1px; text-shadow: 2px 2px 0px rgba(255,255,255,0.9); text-align: center; }
 
-    .result-title {
-      font-size: clamp(12px, 1.3vw, 14px);
-      font-weight: 800;
-      color: #6d4c41;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 2px;
-    }
+    .title-badge-royal { background: linear-gradient(135deg, #c62828 0%, #8e0000 50%, #b71c1c 100%); color: #fffde7; font-size: clamp(11px, 2.8dvh, 16px); font-weight: 900; padding: 1.2dvh 18px; border-radius: 30px; border: 2.5px solid #ffd700; box-shadow: 0 4px 12px rgba(183, 28, 28, 0.45); margin-bottom: 2dvh; text-shadow: 1px 1.5px 2px rgba(0, 0, 0, 0.6); letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; text-align: center; }
 
-    .player-name-big {
-      font-size: clamp(28px, 4vw, 44px);
-      font-weight: 900;
-      color: #b71c1c;
-      text-transform: uppercase;
-      margin: 2px 0 8px 0;
-      letter-spacing: 1.5px;
-      text-shadow: 2px 2px 0px rgba(255,255,255,0.9), 0 0 10px rgba(183, 28, 28, 0.2);
-    }
+    .stats-container { display: flex; justify-content: space-around; width: 100%; background: linear-gradient(180deg, #fffde7 0%, #fff8e1 100%); border: 2px solid #d7ccc8; border-radius: 16px; padding: 1.5dvh 8px; margin-bottom: 2dvh; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); }
+    .stat-item { display: flex; flex-direction: column; align-items: center; flex: 1; }
+    .stat-item:not(:last-child) { border-right: 2px dashed #d7ccc8; }
+    .stat-val { font-size: clamp(15px, 4dvh, 23px); font-weight: 900; color: #1b5e20; text-shadow: 0 1px 0 rgba(255,255,255,0.8); }
+    .stat-lbl { font-size: clamp(10px, 2.2dvh, 12px); font-weight: 700; color: #5d4037; margin-top: 2px; }
 
-    /* PITA GELAR MERAH BINGKAI KEEMASAN */
-    .title-badge-royal {
-      background: linear-gradient(135deg, #c62828 0%, #8e0000 50%, #b71c1c 100%);
-      color: #fffde7;
-      font-size: clamp(13px, 1.5vw, 17px);
-      font-weight: 900;
-      padding: 8px 22px;
-      border-radius: 30px;
-      border: 3px solid #ffd700;
-      box-shadow: 0 6px 16px rgba(183, 28, 28, 0.45), 0 0 12px rgba(255, 215, 0, 0.6);
-      margin-bottom: 20px;
-      text-shadow: 1px 1.5px 2px rgba(0, 0, 0, 0.6);
-      letter-spacing: 0.8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .action-btn-group { display: flex; gap: 14px; }
+    .btn-action { padding: 1.4dvh 24px; font-size: clamp(12px, 3dvh, 15px); font-weight: 800; border: none; border-radius: 22px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: transform 0.15s ease; color: #fff; }
+    .btn-action:hover { transform: scale(1.04); }
+    .btn-restart { background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%); border: 1.5px solid #ffe082; }
+    .btn-exit { background: linear-gradient(135deg, #e53935 0%, #c62828 100%); border: 1.5px solid #ffcdd2; }
 
-    /* GRID REKAP SKOR */
-    .stats-container {
-      display: flex;
-      justify-content: space-around;
-      width: 100%;
-      background: linear-gradient(180deg, #fffde7 0%, #fff8e1 100%);
-      border: 2px solid #d7ccc8;
-      border-radius: 18px;
-      padding: 12px 8px;
-      margin-bottom: 20px;
-      box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
-    }
-
-    .stat-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex: 1;
-    }
-
-    .stat-item:not(:last-child) {
-      border-right: 2px dashed #d7ccc8;
-    }
-
-    .stat-val {
-      font-size: clamp(17px, 2.2vw, 24px);
-      font-weight: 900;
-      color: #1b5e20;
-      text-shadow: 0 1px 0 rgba(255,255,255,0.8);
-    }
-
-    .stat-lbl {
-      font-size: clamp(10px, 1vw, 12px);
-      font-weight: 700;
-      color: #5d4037;
-      margin-top: 3px;
-    }
-
-    .action-btn-group {
-      display: flex;
-      gap: 16px;
-    }
-
-    .btn-action {
-      padding: 10px 26px;
-      font-size: clamp(13px, 1.3vw, 15px);
-      font-weight: 800;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      box-shadow: 0 5px 14px rgba(0,0,0,0.3);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      color: #fff;
-    }
-
-    .btn-action:hover {
-      transform: translateY(-2px) scale(1.04);
-      box-shadow: 0 8px 18px rgba(0,0,0,0.4);
-    }
-
-    .btn-restart {
-      background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
-      border: 1.5px solid #ffe082;
-    }
-
-    .btn-exit {
-      background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
-      border: 1.5px solid #ffcdd2;
-    }
+    #rotate-warning { display: none; position: fixed; inset: 0; background: #1b5e20; color: #ffffff; z-index: 99999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+    @media screen and (orientation: portrait) { #rotate-warning { display: flex; } }
   </style>
 </head>
 <body>
+
+  <div id="rotate-warning">
+    <div style="font-size: 56px; margin-bottom: 12px;">📱🔄</div>
+    <h2>Putar Layar HP Kamu</h2>
+    <p style="margin-top: 8px; font-size: 14px; opacity: 0.9;">Miringkan HP ke posisi mendatar (Landscape) agar game tampil penuh dan rapi.</p>
+  </div>
 
   <img src="assets/images/jelita.png" alt="JELITA Logo" class="brand-logo">
 
@@ -270,8 +104,18 @@
       </div>
     </div>
   </div>
-
   <script>
+    function masukFullScreen() {
+      var elem = document.documentElement;
+      if (!document.fullscreenElement && elem.requestFullscreen) {
+        elem.requestFullscreen().catch(function() {});
+      } else if (!document.webkitFullscreenElement && elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      }
+    }
+    document.addEventListener('touchstart', masukFullScreen, { once: true });
+    document.addEventListener('click', masukFullScreen, { once: true });
+
     window.onload = function() {
       initAudio();
       displayFinalStats();
@@ -281,34 +125,44 @@
       var audio = document.getElementById('bgMusic');
       if (!audio) return;
       audio.volume = 0.5;
-      var playPromise = audio.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(function() {
-          window.addEventListener('click', function unlock() {
-            audio.play();
-            window.removeEventListener('click', unlock);
-          }, { once: true });
-        });
+      var isMuted = localStorage.getItem('jelita_bgm_muted') === 'true';
+      if (!isMuted) {
+        var playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(function() {
+            window.addEventListener('click', function unlock() {
+              audio.play();
+              window.removeEventListener('click', unlock);
+            }, { once: true });
+          });
+        }
       }
     }
 
     function toggleAudio() {
       var audio = document.getElementById('bgMusic');
-      if (audio.paused) audio.play();
-      else audio.pause();
+      if (!audio) return;
+      if (audio.paused) {
+        localStorage.setItem('jelita_bgm_muted', 'false');
+        audio.play();
+      } else {
+        localStorage.setItem('jelita_bgm_muted', 'true');
+        audio.pause();
+      }
     }
 
     function pauseAudio() {
       var audio = document.getElementById('bgMusic');
-      if (audio) audio.pause();
+      if (audio) {
+        localStorage.setItem('jelita_bgm_muted', 'true');
+        audio.pause();
+      }
     }
 
-    /* FUNGSI PENGECEKAN WAKTU LENGKAP & SERBAGUNA */
     function displayFinalStats() {
       var name = localStorage.getItem('jelita_player_name') || 'Petualang';
       document.getElementById('displayPlayerName').innerText = name;
 
-      // 1. HITUNG SKOR BINTANG
       var score1 = parseInt(localStorage.getItem('jelita_score_pos1') || '0');
       var stars1 = parseInt(localStorage.getItem('jelita_stars_pos1') || '0');
       var score2 = parseInt(localStorage.getItem('jelita_score_pos2') || '0');
@@ -318,13 +172,11 @@
 
       var totalStars = (score1 + stars1) + (score2 + stars2) + (score3 + stars3);
 
-      // 2. HITUNG SISA NYAWA
       var lives1 = parseInt(localStorage.getItem('jelita_pos1_lives') || '3');
       var lives2 = parseInt(localStorage.getItem('jelita_pos2_lives') || '3');
       var lives3 = parseInt(localStorage.getItem('jelita_pos3_lives') || '3');
       var totalLives = lives1 + lives2 + lives3;
 
-      // 3. HITUNG SISA WAKTU (Mengecek fleksibel berbagai nama variabel lokal yang mungkin digunakan di Pos 1, 2, & 3)
       var time1 = parseInt(
         localStorage.getItem('jelita_time_pos1') || 
         localStorage.getItem('jelita_pos1_time') || 
@@ -346,13 +198,13 @@
 
       var totalTimeRemaining = time1 + time2 + time3;
 
-      // TAMPILKAN KE LAYAR
       document.getElementById('valStars').innerText = totalStars + ' / 62';
       document.getElementById('valLives').innerText = totalLives + ' / 9';
       document.getElementById('valTime').innerText = totalTimeRemaining + 's';
     }
 
     function restartGame() {
+      masukFullScreen();
       try {
         localStorage.removeItem('jelita_score_pos1');
         localStorage.removeItem('jelita_score_pos2');
@@ -364,6 +216,7 @@
     }
 
     function exitToMenu() {
+      masukFullScreen();
       window.location.href = 'index.html';
     }
   </script>

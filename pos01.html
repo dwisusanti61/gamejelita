@@ -2,7 +2,10 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>JELITA - Pos 1: Gerbang Wana Kahyangan</title>
   <link rel="manifest" href="manifest.json">
   <link rel="prefetch" href="pos1.html">
@@ -14,11 +17,13 @@
       margin: 0;
       padding: 0;
       user-select: none;
+      -webkit-user-select: none;
     }
 
     html, body {
       width: 100vw;
       height: 100vh;
+      height: 100dvh;
       overflow: hidden;
       background-color: #2e7d32;
       font-family: 'Segoe UI', Roboto, sans-serif;
@@ -27,18 +32,19 @@
     /* Fullscreen Wrapper Latar pos01.png */
     .game-wrapper {
       position: relative;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       background: #2e7d32 url('assets/images/pos01.png') no-repeat center center;
-      background-size: cover;
+      background-size: 100% 100%;
     }
 
     /* Logo JELITA di Pojok Kiri Atas */
     .logo-jelita-top {
       position: absolute;
-      top: 3%;
-      left: 2%;
-      height: min(13vw, 70px);
+      top: 3.5%;
+      left: 2.5%;
+      height: 13dvh;
+      max-height: 70px;
       width: auto;
       filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.4));
       pointer-events: none;
@@ -53,7 +59,7 @@
       cursor: pointer;
       outline: none;
       z-index: 1000;
-      transition: transform 0.2s ease, filter 0.2s ease;
+      transition: transform 0.15s ease, filter 0.15s ease;
       pointer-events: auto;
     }
 
@@ -73,7 +79,7 @@
       right: 3%;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 1.5dvh;
       z-index: 1000;
     }
 
@@ -82,7 +88,7 @@
       border: none;
       cursor: pointer;
       outline: none;
-      transition: transform 0.2s ease, filter 0.2s ease;
+      transition: transform 0.15s ease, filter 0.15s ease;
       pointer-events: auto;
     }
 
@@ -96,53 +102,64 @@
     }
 
     .top-right-controls img {
-      height: min(8vw, 55px);
+      height: 10dvh;
+      max-height: 55px;
       width: auto;
       filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.4));
     }
 
     /* Tombol Back di Kiri Bawah */
     .btn-back {
-      bottom: 4%;
+      bottom: 4.5%;
       left: 3%;
     }
 
     .btn-back img {
-      height: min(15vw, 90px);
+      height: 15dvh;
+      max-height: 90px;
       width: auto;
       filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.5));
     }
 
     /* Tombol Siap Raka di Kanan Bawah */
     .btn-siapraka {
-      bottom: 4%;
+      bottom: 4.5%;
       right: 3%;
     }
 
     .btn-siapraka img {
-      height: min(16vw, 100px);
+      height: 16dvh;
+      max-height: 100px;
       width: auto;
       filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.5));
     }
 
-    /* Penyesuaian HP Landscape */
-    @media (max-height: 500px) {
-      .logo-jelita-top {
-        height: 45px;
-      }
-      .top-right-controls img {
-        height: 40px;
-      }
-      .btn-back img {
-        height: min(18vw, 65px);
-      }
-      .btn-siapraka img {
-        height: min(20vw, 75px);
-      }
+    /* Peringatan otomatis jika HP dalam posisi berdiri (Portrait) */
+    #rotate-warning {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #1b5e20;
+      color: #ffffff;
+      z-index: 99999;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+    @media screen and (orientation: portrait) {
+      #rotate-warning { display: flex; }
     }
   </style>
 </head>
 <body>
+
+  <div id="rotate-warning">
+    <div style="font-size: 56px; margin-bottom: 12px;">📱🔄</div>
+    <h2>Putar Layar HP Kamu</h2>
+    <p style="margin-top: 8px; font-size: 14px; opacity: 0.9;">Miringkan HP ke posisi mendatar (Landscape) agar game tampil penuh dan rapi.</p>
+  </div>
 
   <div class="game-wrapper">
     <!-- Logo JELITA Pojok Kiri Atas -->
@@ -178,6 +195,17 @@
   </div>
 
   <script>
+    function masukFullScreen() {
+      const elem = document.documentElement;
+      if (!document.fullscreenElement && elem.requestFullscreen) {
+        elem.requestFullscreen().catch(() => {});
+      } else if (!document.webkitFullscreenElement && elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      }
+    }
+    document.addEventListener('touchstart', masukFullScreen, { once: true });
+    document.addEventListener('click', masukFullScreen, { once: true });
+
     document.addEventListener('DOMContentLoaded', () => {
       const btnHome = document.getElementById('btnHome');
       const btnSound = document.getElementById('btnSound');
@@ -241,6 +269,7 @@
       if (btnHome) {
         btnHome.addEventListener('click', (e) => {
           e.preventDefault();
+          masukFullScreen();
           localStorage.removeItem('jelita_pos1_bgm_time');
           window.location.href = 'menu.html';
         });
@@ -250,6 +279,7 @@
       if (btnBack) {
         btnBack.addEventListener('click', (e) => {
           e.preventDefault();
+          masukFullScreen();
           localStorage.removeItem('jelita_pos1_bgm_time');
           window.location.href = 'map.html';
         });
@@ -259,6 +289,7 @@
       if (btnSiapRaka) {
         btnSiapRaka.addEventListener('click', (e) => {
           e.preventDefault();
+          masukFullScreen();
           if (!bgMusic.paused) {
             localStorage.setItem('jelita_pos1_bgm_time', bgMusic.currentTime.toString());
           }

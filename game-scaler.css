@@ -1,0 +1,27 @@
+/* Kunci layar HP agar tidak bisa digeser-geser */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #000; /* Latar hitam di sisa pinggiran layar */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Wadah utama game (sesuaikan width & height dengan ukuran asli desainmu) */
+#game-container {
+  width: 1280px;  /* Ganti jika desain aslimu memakai ukuran lain, misal 1024px */
+  height: 720px;  /* Ganti jika desain aslimu memakai ukuran lain, misal 768px */
+  position: relative;
+  transform-origin: center center;
+  overflow: hidden;
+}
+
+/* Percepat transisi & pastikan pop-up petunjuk tidak menutupi tombol tutup */
+.modal-petunjuk, #modal-info {
+  z-index: 9999 !important;
+  transition: opacity 0.15s ease !important;
+}

@@ -2,441 +2,106 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>JELITA - Pos 2: Kedung Pasiraman</title>
   <link rel="manifest" href="manifest.json">
   <link rel="prefetch" href="pos03.html">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-      -webkit-user-select: none;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    html, body { width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; background-color: #00796b; font-family: 'Segoe UI', Roboto, sans-serif; }
+    .game-wrapper { position: relative; width: 100%; height: 100%; overflow: hidden; background: #00796b url('assets/images/pos2.png') no-repeat center center; background-size: 100% 100%; }
 
-    html, body {
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      background-color: #00796b;
-      font-family: 'Segoe UI', Roboto, sans-serif;
-    }
+    .top-left-controls { position: absolute; top: 3.5%; left: 2%; display: flex; align-items: center; gap: 1.5dvh; z-index: 1000; }
+    .top-left-controls button { background: none; border: none; cursor: pointer; outline: none; transition: transform 0.15s ease; }
+    .top-left-controls button:hover { transform: scale(1.1); }
+    .top-left-controls img { height: 10dvh; max-height: 55px; width: auto; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.4)); }
 
-    /* Container Utama */
-    .game-wrapper {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      background: #00796b url('assets/images/pos2.png') no-repeat center center;
-      background-size: cover;
-    }
+    .top-right-status { position: absolute; top: 3.5%; right: 3%; display: flex; align-items: center; gap: min(2.5vw, 16px); z-index: 1000; background: linear-gradient(180deg, #e53935 0%, #b71c1c 100%); padding: 1.2dvh min(3.5vw, 20px); border-radius: 30px; border: 3px solid #fbc02d; box-shadow: 0 6px 15px rgba(0,0,0,0.6); }
+    .status-item { display: flex; align-items: center; gap: 6px; color: #ffffff; font-weight: 900; font-size: clamp(14px, 3.8dvh, 20px); text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+    .yellow-icon { color: #ffeb3b; font-size: clamp(16px, 4.5dvh, 24px); line-height: 1; }
 
-    /* Controls Kiri Atas */
-    .top-left-controls {
-      position: absolute;
-      top: 3.5%;
-      left: 2%;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 1000;
-    }
+    .arena-panel { position: absolute; top: 61%; left: 60%; transform: translate(-50%, -50%); width: min(62vw, 580px); height: min(64dvh, 360px); background: linear-gradient(180deg, #fffde7 0%, #fff9c4 100%); border: 5px solid #5d4037; border-radius: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 0 12px rgba(141, 110, 99, 0.3); padding: 10px 14px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; z-index: 500; }
+    .question-title { font-size: clamp(13px, 3.4dvh, 18px); font-weight: 800; color: #3e2723; text-align: center; }
 
-    .top-left-controls button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      outline: none;
-      transition: transform 0.2s ease;
-    }
+    .simbiosis-container { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+    .simbiosis-img-box { width: min(36vw, 240px); max-height: 28dvh; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; border: 3px solid #4e342e; box-shadow: 0 4px 10px rgba(0,0,0,0.25); background: #eee; }
+    .simbiosis-img-box img { width: 100%; height: 100%; object-fit: cover; }
+    .simbiosis-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+    .btn-option { background: linear-gradient(180deg, #ffe082 0%, #ffb300 100%); border: 2px solid #ff6f00; border-radius: 12px; padding: 1.4dvh 4px; font-size: clamp(11px, 2.8dvh, 15px); font-weight: 800; color: #3e2723; cursor: pointer; box-shadow: 0 3px 6px rgba(0,0,0,0.2); transition: transform 0.15s ease; }
+    .btn-option:hover { transform: scale(1.03); background: linear-gradient(180deg, #ffd54f 0%, #ffa000 100%); }
 
-    .top-left-controls button:hover {
-      transform: scale(1.1);
-    }
+    .foodchain-container { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+    .slots-row { display: flex; align-items: center; justify-content: center; gap: min(1vw, 8px); width: 100%; }
+    .slot-wrapper { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .drop-slot { position: relative; width: clamp(54px, 17dvh, 96px); height: clamp(54px, 17dvh, 96px); border: 2.5px dashed #6d4c41; border-radius: 14px; background: rgba(255, 255, 255, 0.95); display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); overflow: visible; }
+    .drop-slot.slot-correct { border: 3px solid #2e7d32 !important; background: #c8e6c9 !important; }
+    .drop-slot.slot-wrong { border: 3px solid #c62828 !important; background: #ffcdd2 !important; }
+    .slot-label { font-size: clamp(10px, 2.2dvh, 12px); font-weight: 800; color: #4e342e; }
+    .arrow-icon { font-size: clamp(14px, 3.2dvh, 20px); font-weight: 900; color: #e65100; }
 
-    .top-left-controls img {
-      height: min(8vw, 55px);
-      width: auto;
-      filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.4));
-    }
+    .cards-pool { display: flex; align-items: center; justify-content: center; gap: min(1.2vw, 10px); width: 100%; min-height: clamp(60px, 19dvh, 105px); background: rgba(215, 204, 200, 0.7); border: 2px solid #8d6e63; border-radius: 14px; padding: 5px; }
+    .food-card { position: relative; width: clamp(48px, 15.5dvh, 88px); height: clamp(48px, 15.5dvh, 88px); cursor: grab; touch-action: none; z-index: 1000; background: #ffffff; border-radius: 10px; padding: 3px; box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
+    .food-card img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+    .wrong-overlay { position: absolute; inset: 0; background: rgba(255, 235, 238, 0.85); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: clamp(24px, 7dvh, 42px); color: #d32f2f; pointer-events: none; z-index: 2500; font-weight: 900; }
 
-    /* Status Bar Kanan Atas */
-    .top-right-status {
-      position: absolute;
-      top: 3.5%;
-      right: 3%;
-      display: flex;
-      align-items: center;
-      gap: min(2.5vw, 16px);
-      z-index: 1000;
-      background: linear-gradient(180deg, #e53935 0%, #b71c1c 100%);
-      padding: 6px min(3.5vw, 20px);
-      border-radius: 30px;
-      border: 4px solid #fbc02d;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.6);
-    }
+    .floating-text { position: absolute; font-size: clamp(26px, 8dvh, 50px); font-weight: 900; z-index: 3000; pointer-events: none; animation: floatUp 1.1s ease-out forwards; }
+    .floating-text.plus { color: #00e676; text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000; }
+    .floating-text.minus { color: #ff1744; text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000; }
+    @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(0.8); } 30% { transform: translateY(-30px) scale(1.2); } 100% { opacity: 0; transform: translateY(-90px) scale(1); } }
 
-    .status-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: #ffffff;
-      font-weight: 900;
-      font-size: min(4vw, 20px);
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-    }
-
-    .yellow-icon {
-      color: #ffeb3b;
-      font-size: min(5vw, 24px);
-      line-height: 1;
-    }
-
-    /* KOTAK SOAL PAPAN KAYU */
-    .arena-panel {
-      position: absolute;
-      top: 62%;
-      left: 60%;
-      transform: translate(-50%, -50%);
-      width: min(60vw, 580px);
-      height: min(56vh, 360px);
-      background: linear-gradient(180deg, #fffde7 0%, #fff9c4 100%);
-      border: 6px solid #5d4037;
-      border-radius: 24px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 0 12px rgba(141, 110, 99, 0.3);
-      padding: 14px 18px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 500;
-    }
-
-    .question-title {
-      font-size: min(3.4vw, 18px);
-      font-weight: 800;
-      color: #3e2723;
-      text-align: center;
-    }
-
-    /* Layout Tipe 1: Simbiosis */
-    .simbiosis-container {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .simbiosis-img-box {
-      width: min(38vw, 260px);
-      aspect-ratio: 16 / 9;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 3.5px solid #4e342e;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-      background: #eee;
-    }
-
-    .simbiosis-img-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .simbiosis-options {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      width: 100%;
-    }
-
-    .btn-option {
-      background: linear-gradient(180deg, #ffe082 0%, #ffb300 100%);
-      border: 2.5px solid #ff6f00;
-      border-radius: 14px;
-      padding: 9px 4px;
-      font-size: min(3vw, 15px);
-      font-weight: 800;
-      color: #3e2723;
-      cursor: pointer;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-      transition: transform 0.15s ease;
-    }
-
-    .btn-option:hover {
-      transform: scale(1.03);
-      background: linear-gradient(180deg, #ffd54f 0%, #ffa000 100%);
-    }
-
-    /* Layout Tipe 2: Rantai Makanan (Ukuran Diperbesar) */
-    .foodchain-container {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .slots-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: min(1vw, 8px);
-      width: 100%;
-    }
-
-    .slot-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .drop-slot {
-      position: relative;
-      width: min(12.8vw, 100px);
-      height: min(12.8vw, 100px);
-      border: 3px dashed #6d4c41;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.95);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-      overflow: visible;
-    }
-
-    .drop-slot.slot-correct {
-      border: 3.5px solid #2e7d32 !important;
-      background: #c8e6c9 !important;
-    }
-
-    .drop-slot.slot-wrong {
-      border: 3.5px solid #c62828 !important;
-      background: #ffcdd2 !important;
-    }
-
-    .slot-label {
-      font-size: min(2.4vw, 12px);
-      font-weight: 800;
-      color: #4e342e;
-    }
-
-    .arrow-icon {
-      font-size: min(3.5vw, 20px);
-      font-weight: 900;
-      color: #e65100;
-    }
-
-    .cards-pool {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: min(1.2vw, 10px);
-      width: 100%;
-      min-height: min(14.5vw, 110px);
-      background: rgba(215, 204, 200, 0.7);
-      border: 2.5px solid #8d6e63;
-      border-radius: 16px;
-      padding: 6px;
-    }
-
-    .food-card {
-      position: relative;
-      width: min(11.8vw, 92px);
-      height: min(11.8vw, 92px);
-      cursor: grab;
-      touch-action: none;
-      z-index: 1000;
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 3px;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-    }
-
-    .food-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      pointer-events: none;
-    }
-
-    .wrong-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 235, 238, 0.85);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: min(7vw, 42px);
-      color: #d32f2f;
-      pointer-events: none;
-      z-index: 2500;
-      font-weight: 900;
-    }
-
-    .floating-text {
-      position: absolute;
-      font-size: min(8vw, 50px);
-      font-weight: 900;
-      z-index: 3000;
-      pointer-events: none;
-      animation: floatUp 1.1s ease-out forwards;
-    }
-
-    .floating-text.plus {
-      color: #00e676;
-      text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
-    }
-
-    .floating-text.minus {
-      color: #ff1744;
-      text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
-    }
-
-    @keyframes floatUp {
-      0% { opacity: 1; transform: translateY(0) scale(0.8); }
-      30% { transform: translateY(-30px) scale(1.2); }
-      100% { opacity: 0; transform: translateY(-90px) scale(1); }
-    }
-
-    /* Modal Pop-up Evaluasi & Materi */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-      backdrop-filter: blur(5px);
-    }
-
-    .modal-content {
-      position: relative;
-      width: min(85vw, 520px);
-      max-height: 85vh;
-      overflow-y: auto;
-      background: #ffffff;
-      border: 5px solid #fbc02d;
-      border-radius: 22px;
-      padding: 20px 16px;
-      text-align: center;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-    }
-
-    .modal-title { font-size: min(5vw, 22px); font-weight: 800; color: #1b5e20; margin-bottom: 10px; }
-    .modal-desc { font-size: min(3.6vw, 15px); color: #333; margin-bottom: 16px; line-height: 1.4; font-weight: 600; }
-
-    .materi-box {
-      background: #e8f5e9;
-      border: 2px dashed #4caf50;
-      border-radius: 12px;
-      padding: 10px 12px;
-      margin-bottom: 15px;
-      text-align: left;
-    }
-    .materi-item { margin-bottom: 8px; font-size: 14px; }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.82); z-index: 9999; justify-content: center; align-items: center; padding: 12px; }
+    .modal-content { position: relative; width: min(88vw, 520px); max-height: 88dvh; display: flex; flex-direction: column; background: #ffffff; border: 5px solid #fbc02d; border-radius: 20px; padding: 16px 18px; text-align: center; box-shadow: 0 12px 30px rgba(0,0,0,0.6); }
+    .modal-title { font-size: clamp(16px, 4.2dvh, 22px); font-weight: 800; color: #1b5e20; margin-bottom: 8px; flex-shrink: 0; }
+    .modal-desc { font-size: clamp(13px, 3.2dvh, 15px); color: #333; margin-bottom: 12px; line-height: 1.45; font-weight: 600; overflow-y: auto; flex: 1; }
+    .materi-box { background: #e8f5e9; border: 2px dashed #4caf50; border-radius: 12px; padding: 10px 12px; text-align: left; }
+    .materi-item { margin-bottom: 8px; font-size: clamp(12px, 3dvh, 14px); }
+    .materi-item:last-child { margin-bottom: 0; }
     .materi-item strong { color: #2e7d32; }
+    .modal-buttons-container { display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap; width: 100%; flex-shrink: 0; }
+    .btn-modal-action { padding: 10px 24px; font-size: clamp(13px, 3.4dvh, 16px); font-weight: 800; color: #fff; background: #2e7d32; border: none; border-radius: 14px; cursor: pointer; }
+    .btn-modal-exit { padding: 10px 24px; font-size: clamp(13px, 3.4dvh, 16px); font-weight: 800; color: #fff; background: #c62828; border: none; border-radius: 14px; cursor: pointer; }
 
-    /* KONTAINER TOMBOL MODAL (UNTUK SUPPORT SINGLE / DUAL BUTTON) */
-    .modal-buttons-container {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-    }
+    .btn-go-next { position: absolute; bottom: 4.5%; right: 3%; background: none; border: none; cursor: pointer; z-index: 2000; display: none; }
+    .btn-go-next img { height: 15dvh; max-height: 95px; width: auto; filter: drop-shadow(0px 6px 12px rgba(0,0,0,0.6)); }
 
-    .btn-modal-action {
-      padding: 10px 25px;
-      font-size: min(4vw, 16px);
-      font-weight: 800;
-      color: #fff;
-      background: #2e7d32;
-      border: none;
-      border-radius: 15px;
-      cursor: pointer;
-    }
-
-    .btn-modal-exit {
-      padding: 10px 25px;
-      font-size: min(4vw, 16px);
-      font-weight: 800;
-      color: #fff;
-      background: #c62828;
-      border: none;
-      border-radius: 15px;
-      cursor: pointer;
-    }
-
-    .btn-go-next {
-      position: absolute;
-      bottom: 4%;
-      right: 3%;
-      background: none;
-      border: none;
-      cursor: pointer;
-      z-index: 2000;
-      display: none;
-    }
-
-    .btn-go-next img {
-      height: min(15vw, 95px);
-      width: auto;
-      filter: drop-shadow(0px 6px 12px rgba(0,0,0,0.6));
-    }
+    #rotate-warning { display: none; position: fixed; inset: 0; background: #1b5e20; color: #ffffff; z-index: 99999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+    @media screen and (orientation: portrait) { #rotate-warning { display: flex; } }
   </style>
 </head>
 <body>
 
+  <div id="rotate-warning">
+    <div style="font-size: 56px; margin-bottom: 12px;">📱🔄</div>
+    <h2>Putar Layar HP Kamu</h2>
+    <p style="margin-top: 8px; font-size: 14px; opacity: 0.9;">Miringkan HP ke posisi mendatar (Landscape) agar game tampil penuh dan rapi.</p>
+  </div>
+
   <div class="game-wrapper" id="gameWrapper">
-    <!-- Audio BGM -->
     <audio id="bgMusic" loop preload="auto">
       <source src="assets/audio/audio3.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Controls Kiri Atas -->
     <div class="top-left-controls">
       <button id="btnSound" onclick="playAudio()" title="Nyalakan Suara"><img src="assets/images/sound.png" alt="Sound"></button>
       <button id="btnPause" onclick="pauseAudio()" title="Matikan Suara"><img src="assets/images/pause.png" alt="Pause"></button>
     </div>
 
-    <!-- Status Bar Kanan Atas -->
     <div class="top-right-status">
-      <div class="status-item">
-        <span class="yellow-icon">💛</span> <span id="livesText">3</span>
-      </div>
-      <div class="status-item">
-        <span class="yellow-icon">⭐</span> <span id="scoreText">0</span>
-      </div>
-      <div class="status-item">
-        <span class="yellow-icon">⏱️</span> <span id="timerText">150</span>s
-      </div>
+      <div class="status-item"><span class="yellow-icon">💛</span> <span id="livesText">3</span></div>
+      <div class="status-item"><span class="yellow-icon">⭐</span> <span id="scoreText">0</span></div>
+      <div class="status-item"><span class="yellow-icon">⏱️</span> <span id="timerText">150</span>s</div>
     </div>
 
-    <!-- Arena Panel Tempat Soal Utama -->
     <div class="arena-panel" id="arenaPanel"></div>
 
-    <!-- Tombol GO Lanjut ke Pos 3 -->
     <button class="btn-go-next" id="btnGoNext" onclick="goPos3()" title="Lanjut ke Pos 3">
       <img src="assets/images/go.png" alt="Lanjut Pos 3">
     </button>
   </div>
 
-  <!-- Modal Pop-up Evaluasi -->
   <div class="modal-overlay" id="gameModal">
     <div class="modal-content">
       <div class="modal-title" id="modalTitle">Hasil Permainan</div>
@@ -449,19 +114,24 @@
   </div>
 
   <script>
+    function masukFullScreen() {
+      var elem = document.documentElement;
+      if (!document.fullscreenElement && elem.requestFullscreen) {
+        elem.requestFullscreen().catch(function() {});
+      } else if (!document.webkitFullscreenElement && elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      }
+    }
+    document.addEventListener('touchstart', masukFullScreen, { once: true });
+    document.addEventListener('click', masukFullScreen, { once: true });
+
     var simbiosisBank = [
       { img: 'assets/images/items/mutualisme.png', answer: 'Simbiosis Mutualisme' },
       { img: 'assets/images/items/komensalisme.png', answer: 'Simbiosis Komensalisme' },
       { img: 'assets/images/items/parasitisme.png', answer: 'Simbiosis Parasitisme' }
     ];
 
-    var currentQuestionIndex = 0;
-    var lives = 3;
-    var score = 0;
-    var timer = 150;
-    var timerInterval = null;
-    var attemptCount = 1;
-
+    var currentQuestionIndex = 0, lives = 3, score = 0, timer = 150, timerInterval = null, attemptCount = 1;
     var activeSimbiosisQuestions = [];
     var currentSlotContents = [null, null, null, null];
 
@@ -477,73 +147,41 @@
     var btnModalAction = document.getElementById('btnModalAction');
     var btnModalExit = document.getElementById('btnModalExit');
 
-    function playAudio() {
-      if(bgMusic) {
-        localStorage.setItem('jelita_bgm_muted', 'false');
-        bgMusic.play().catch(function(){});
-      }
-    }
-
-    function pauseAudio() {
-      if(bgMusic) {
-        localStorage.setItem('jelita_bgm_muted', 'true');
-        bgMusic.pause();
-      }
-    }
-
+    function playAudio() { if(bgMusic) { localStorage.setItem('jelita_bgm_muted', 'false'); bgMusic.play().catch(function(){}); } }
+    function pauseAudio() { if(bgMusic) { localStorage.setItem('jelita_bgm_muted', 'true'); bgMusic.pause(); } }
     function goPos3() {
-      if (bgMusic && !bgMusic.paused) {
-        localStorage.setItem('jelita_pos2_bgm_time', bgMusic.currentTime.toString());
-      }
+      masukFullScreen();
+      if (bgMusic && !bgMusic.paused) localStorage.setItem('jelita_pos2_bgm_time', bgMusic.currentTime.toString());
       window.location.href = 'pos03.html';
     }
-
     if (bgMusic) {
       bgMusic.volume = 0.35;
       var savedTime = parseFloat(localStorage.getItem('jelita_pos2_bgm_time') || 0);
       var isMuted = localStorage.getItem('jelita_bgm_muted') === 'true';
-
       if (!isMuted) {
-        if (savedTime > 0) {
-          try { bgMusic.currentTime = savedTime; } catch(e){}
-        }
+        if (savedTime > 0) { try { bgMusic.currentTime = savedTime; } catch(e){} }
         bgMusic.play().catch(function() {
-          document.addEventListener('click', function unlock() {
-            bgMusic.play();
-            document.removeEventListener('click', unlock);
-          }, { once: true });
+          document.addEventListener('click', function unlock() { bgMusic.play(); document.removeEventListener('click', unlock); }, { once: true });
         });
       }
-
       bgMusic.addEventListener('timeupdate', function() {
-        if (!bgMusic.paused && bgMusic.currentTime > 0) {
-          localStorage.setItem('jelita_pos2_bgm_time', bgMusic.currentTime.toString());
-        }
+        if (!bgMusic.paused && bgMusic.currentTime > 0) localStorage.setItem('jelita_pos2_bgm_time', bgMusic.currentTime.toString());
       });
     }
 
     function startRound() {
-      score = 0;
-      currentQuestionIndex = 0;
-      timer = 150;
+      score = 0; currentQuestionIndex = 0; timer = 150;
       if(scoreText) scoreText.textContent = score;
       if(livesText) livesText.textContent = lives;
       if(timerText) timerText.textContent = timer;
       if(btnGoNext) btnGoNext.style.display = 'none';
       if(arenaPanel) arenaPanel.style.display = 'flex';
-
       activeSimbiosisQuestions = simbiosisBank.slice().sort(function() { return 0.5 - Math.random(); }).slice(0, 2);
-
       if (timerInterval) clearInterval(timerInterval);
       timerInterval = setInterval(function() {
-        timer--;
-        if(timerText) timerText.textContent = timer;
-        if (timer <= 0) {
-          clearInterval(timerInterval);
-          onFail("Waktu 150 detik habis!");
-        }
+        timer--; if(timerText) timerText.textContent = timer;
+        if (timer <= 0) { clearInterval(timerInterval); onFail("Waktu 150 detik habis!"); }
       }, 1000);
-
       loadQuestion();
     }
 
@@ -551,457 +189,176 @@
       if(!arenaPanel) return;
       arenaPanel.innerHTML = '';
       currentSlotContents = [null, null, null, null];
-
-      if (currentQuestionIndex === 0 || currentQuestionIndex === 1) {
-        renderSimbiosisQuestion(activeSimbiosisQuestions[currentQuestionIndex]);
-      } else if (currentQuestionIndex === 2) {
-        renderFoodChainQuestion3();
-      } else if (currentQuestionIndex === 3) {
-        renderFoodChainQuestion4();
-      } else {
-        onFinish();
-      }
+      if (currentQuestionIndex === 0 || currentQuestionIndex === 1) renderSimbiosisQuestion(activeSimbiosisQuestions.at(currentQuestionIndex));
+      else if (currentQuestionIndex === 2) renderFoodChainQuestion3();
+      else if (currentQuestionIndex === 3) renderFoodChainQuestion4();
+      else onFinish();
     }
 
     function renderSimbiosisQuestion(qData) {
-      var container = document.createElement('div');
-      container.className = 'simbiosis-container';
-
-      var title = document.createElement('div');
-      title.className = 'question-title';
-      title.textContent = 'Perhatikan gambar!';
-
-      var imgBox = document.createElement('div');
-      imgBox.className = 'simbiosis-img-box';
-      imgBox.innerHTML = '<img src="' + qData.img + '" alt="Simbiosis">';
-
-      var subTitle = document.createElement('div');
-      subTitle.className = 'question-title';
-      subTitle.style.fontSize = 'min(2.8vw, 14px)';
-      subTitle.textContent = 'Hubungan interaksi yang ditunjukkan pada gambar disebut ....';
-
-      var optionsBox = document.createElement('div');
-      optionsBox.className = 'simbiosis-options';
-
-      var options = [
-        'Simbiosis Mutualisme',
-        'Simbiosis Komensalisme',
-        'Simbiosis Parasitisme',
-        'Simbiosis Amensalisme'
-      ];
-
+      var container = document.createElement('div'); container.className = 'simbiosis-container';
+      var title = document.createElement('div'); title.className = 'question-title'; title.textContent = 'Perhatikan gambar!';
+      var imgBox = document.createElement('div'); imgBox.className = 'simbiosis-img-box'; imgBox.innerHTML = '<img src="' + qData.img + '" alt="Simbiosis">';
+      var subTitle = document.createElement('div'); subTitle.className = 'question-title'; subTitle.style.fontSize = 'clamp(11px, 2.8dvh, 14px)'; subTitle.textContent = 'Hubungan interaksi yang ditunjukkan pada gambar disebut ....';
+      var optionsBox = document.createElement('div'); optionsBox.className = 'simbiosis-options';
+      var options = ['Simbiosis Mutualisme', 'Simbiosis Komensalisme', 'Simbiosis Parasitisme', 'Simbiosis Amensalisme'];
       options.forEach(function(opt) {
-        var btn = document.createElement('button');
-        btn.className = 'btn-option';
-        btn.textContent = opt;
-        btn.onclick = function(e) {
+        var btn = document.createElement('button'); btn.className = 'btn-option'; btn.textContent = opt;
+        btn.onclick = function() {
           var rect = btn.getBoundingClientRect();
-          if (opt === qData.answer) {
-            score += 1;
-            if(scoreText) scoreText.textContent = score;
-            popText('+1', rect.left + 20, rect.top, 'plus');
-          } else {
-            popText('❌', rect.left + 20, rect.top, 'minus');
-          }
-          currentQuestionIndex++;
-          setTimeout(loadQuestion, 800);
+          if (opt === qData.answer) { score += 1; if(scoreText) scoreText.textContent = score; popText('+1', rect.left + 20, rect.top, 'plus'); }
+          else { popText('❌', rect.left + 20, rect.top, 'minus'); }
+          currentQuestionIndex++; setTimeout(loadQuestion, 800);
         };
         optionsBox.appendChild(btn);
       });
-
-      container.appendChild(title);
-      container.appendChild(imgBox);
-      container.appendChild(subTitle);
-      container.appendChild(optionsBox);
-      arenaPanel.appendChild(container);
+      container.appendChild(title); container.appendChild(imgBox); container.appendChild(subTitle); container.appendChild(optionsBox); arenaPanel.appendChild(container);
     }
 
     function renderFoodChainQuestion3() {
       var foodItems = [
-        { id: 'kumbang', img: 'assets/images/items/kumbang.png' },
-        { id: 'lumut', img: 'assets/images/items/lumut.png' },
-        { id: 'ular', img: 'assets/images/items/ular.png' },
-        { id: 'sikatan', img: 'assets/images/items/sikatan.png' },
+        { id: 'kumbang', img: 'assets/images/items/kumbang.png' }, { id: 'lumut', img: 'assets/images/items/lumut.png' },
+        { id: 'ular', img: 'assets/images/items/ular.png' }, { id: 'sikatan', img: 'assets/images/items/sikatan.png' },
         { id: 'daunjati', img: 'assets/images/items/daunjati.png' }
       ];
-
-      var validChains = [
-        ['lumut', 'kumbang', 'sikatan', 'ular'],
-        ['daunjati', 'kumbang', 'sikatan', 'ular']
-      ];
-
-      setupFoodChainUI(foodItems, validChains);
+      setupFoodChainUI(foodItems, [['lumut', 'kumbang', 'sikatan', 'ular'], ['daunjati', 'kumbang', 'sikatan', 'ular']]);
     }
 
     function renderFoodChainQuestion4() {
       var foodItems = [
-        { id: 'wader', img: 'assets/images/items/wader.png' },
-        { id: 'nyamuk', img: 'assets/images/items/nyamuk.png' },
-        { id: 'lumutair', img: 'assets/images/items/lumutair.png' },
-        { id: 'rajaudang', img: 'assets/images/items/rajaudang.png' },
+        { id: 'wader', img: 'assets/images/items/wader.png' }, { id: 'nyamuk', img: 'assets/images/items/nyamuk.png' },
+        { id: 'lumutair', img: 'assets/images/items/lumutair.png' }, { id: 'rajaudang', img: 'assets/images/items/rajaudang.png' },
         { id: 'uceng', img: 'assets/images/items/uceng.png' }
       ];
-
-      var validChains = [
-        ['lumutair', 'nyamuk', 'wader', 'rajaudang'],
-        ['lumutair', 'nyamuk', 'uceng', 'rajaudang']
-      ];
-
-      setupFoodChainUI(foodItems, validChains);
+      setupFoodChainUI(foodItems, [['lumutair', 'nyamuk', 'wader', 'rajaudang'], ['lumutair', 'nyamuk', 'uceng', 'rajaudang']]);
     }
-
     function setupFoodChainUI(foodItems, validChains) {
-      var container = document.createElement('div');
-      container.className = 'foodchain-container';
-
-      var title = document.createElement('div');
-      title.className = 'question-title';
-      title.textContent = 'Susun menjadi rantai makanan yang benar!';
-
-      var slotsRow = document.createElement('div');
-      slotsRow.className = 'slots-row';
-
+      var container = document.createElement('div'); container.className = 'foodchain-container';
+      var title = document.createElement('div'); title.className = 'question-title'; title.textContent = 'Susun menjadi rantai makanan yang benar!';
+      var slotsRow = document.createElement('div'); slotsRow.className = 'slots-row';
       var labels = ['Produsen', 'Konsumen I', 'Konsumen II', 'Konsumen III'];
-
       for (var i = 0; i < 4; i++) {
-        var wrapper = document.createElement('div');
-        wrapper.className = 'slot-wrapper';
-
-        var slot = document.createElement('div');
-        slot.className = 'drop-slot';
-        slot.dataset.index = i;
-
-        var lbl = document.createElement('div');
-        lbl.className = 'slot-label';
-        lbl.textContent = labels[i];
-
-        wrapper.appendChild(slot);
-        wrapper.appendChild(lbl);
-        slotsRow.appendChild(wrapper);
-
-        if (i < 3) {
-          var arrow = document.createElement('div');
-          arrow.className = 'arrow-icon';
-          arrow.textContent = '➔';
-          slotsRow.appendChild(arrow);
-        }
+        var wrapper = document.createElement('div'); wrapper.className = 'slot-wrapper';
+        var slot = document.createElement('div'); slot.className = 'drop-slot'; slot.dataset.index = i;
+        var lbl = document.createElement('div'); lbl.className = 'slot-label'; lbl.textContent = labels.at(i);
+        wrapper.appendChild(slot); wrapper.appendChild(lbl); slotsRow.appendChild(wrapper);
+        if (i < 3) { var arrow = document.createElement('div'); arrow.className = 'arrow-icon'; arrow.textContent = '➔'; slotsRow.appendChild(arrow); }
       }
-
-      var pool = document.createElement('div');
-      pool.className = 'cards-pool';
-      pool.id = 'cardsPool';
-
-      var shuffledItems = foodItems.slice().sort(function() { return 0.5 - Math.random(); });
-      shuffledItems.forEach(function(itemData) {
-        var card = document.createElement('div');
-        card.className = 'food-card';
-        card.dataset.id = itemData.id;
+      var pool = document.createElement('div'); pool.className = 'cards-pool'; pool.id = 'cardsPool';
+      foodItems.slice().sort(function() { return 0.5 - Math.random(); }).forEach(function(itemData) {
+        var card = document.createElement('div'); card.className = 'food-card'; card.dataset.id = itemData.id;
         card.innerHTML = '<img src="' + itemData.img + '" alt="' + itemData.id + '">';
-        pool.appendChild(card);
-        attachDragAndDrop(card, pool, validChains);
+        pool.appendChild(card); attachDragAndDrop(card, pool, validChains);
       });
-
-      container.appendChild(title);
-      container.appendChild(slotsRow);
-      container.appendChild(pool);
-      arenaPanel.appendChild(container);
+      container.appendChild(title); container.appendChild(slotsRow); container.appendChild(pool); arenaPanel.appendChild(container);
     }
 
     function attachDragAndDrop(card, pool, validChains) {
       var isDragging = false;
-
-      card.onmousedown = startDrag;
-      card.ontouchstart = startDragTouch;
-
-      function startDrag(e) {
-        e.preventDefault();
-        isDragging = true;
-        card.style.position = 'fixed';
-        card.style.zIndex = '5000';
-        moveAt(e.clientX, e.clientY);
-
-        document.onmousemove = function(e) {
-          if (isDragging) moveAt(e.clientX, e.clientY);
-        };
-
-        document.onmouseup = function(e) {
-          document.onmousemove = null;
-          document.onmouseup = null;
-          endDrag(e.clientX, e.clientY);
-        };
-      }
-
-      function startDragTouch(e) {
-        isDragging = true;
-        var touch = e.touches[0];
-        card.style.position = 'fixed';
-        card.style.zIndex = '5000';
-        moveAt(touch.clientX, touch.clientY);
-
-        document.ontouchmove = function(e) {
-          if (isDragging) {
-            var t = e.touches[0];
-            moveAt(t.clientX, t.clientY);
-          }
-        };
-
-        document.ontouchend = function(e) {
-          document.ontouchmove = null;
-          document.ontouchend = null;
-          var t = e.changedTouches[0];
-          endDrag(t.clientX, t.clientY);
-        };
-      }
-
-      function moveAt(pageX, pageY) {
-        card.style.left = pageX - (card.offsetWidth / 2) + 'px';
-        card.style.top = pageY - (card.offsetHeight / 2) + 'px';
-      }
-
+      card.onmousedown = function(e) {
+        e.preventDefault(); isDragging = true; card.style.position = 'fixed'; card.style.zIndex = '5000'; moveAt(e.clientX, e.clientY);
+        document.onmousemove = function(ev) { if (isDragging) moveAt(ev.clientX, ev.clientY); };
+        document.onmouseup = function(ev) { document.onmousemove = null; document.onmouseup = null; endDrag(ev.clientX, ev.clientY); };
+      };
+      card.ontouchstart = function(e) {
+        isDragging = true; var touch = e.touches.item(0); card.style.position = 'fixed'; card.style.zIndex = '5000'; moveAt(touch.clientX, touch.clientY);
+        document.ontouchmove = function(ev) { if (isDragging) { var t = ev.touches.item(0); moveAt(t.clientX, t.clientY); } };
+        document.ontouchend = function(ev) { document.ontouchmove = null; document.ontouchend = null; var t = ev.changedTouches.item(0); endDrag(t.clientX, t.clientY); };
+      };
+      function moveAt(pageX, pageY) { card.style.left = pageX - (card.offsetWidth / 2) + 'px'; card.style.top = pageY - (card.offsetHeight / 2) + 'px'; }
       function endDrag(clientX, clientY) {
-        isDragging = false;
-        card.style.zIndex = '1000';
-
-        var slots = document.querySelectorAll('.drop-slot');
-        var placedSlot = null;
-
+        isDragging = false; card.style.zIndex = '1000';
+        var slots = document.querySelectorAll('.drop-slot'), placedSlot = null;
         slots.forEach(function(s) {
           var sRect = s.getBoundingClientRect();
-          if (clientX >= sRect.left && clientX <= sRect.right &&
-              clientY >= sRect.top && clientY <= sRect.bottom) {
-            placedSlot = s;
-          }
+          if (clientX >= sRect.left && clientX <= sRect.right && clientY >= sRect.top && clientY <= sRect.bottom) placedSlot = s;
         });
-
         if (placedSlot) {
           var slotIndex = parseInt(placedSlot.dataset.index);
-
-          if (currentSlotContents[slotIndex] && currentSlotContents[slotIndex] !== card) {
-            var oldCard = currentSlotContents[slotIndex];
-            oldCard.style.position = 'relative';
-            oldCard.style.left = '0';
-            oldCard.style.top = '0';
-            pool.appendChild(oldCard);
+          if (currentSlotContents.at(slotIndex) && currentSlotContents.at(slotIndex) !== card) {
+            var oldCard = currentSlotContents.at(slotIndex); oldCard.style.position = 'relative'; oldCard.style.left = '0'; oldCard.style.top = '0'; pool.appendChild(oldCard);
           }
-
-          for (var k = 0; k < 4; k++) {
-            if (currentSlotContents[k] === card) currentSlotContents[k] = null;
-          }
-
-          card.style.position = 'relative';
-          card.style.left = '0';
-          card.style.top = '0';
-          placedSlot.appendChild(card);
-          currentSlotContents[slotIndex] = card;
-
+          for (var k = 0; k < 4; k++) { if (currentSlotContents.at(k) === card) currentSlotContents.splice(k, 1, null); }
+          card.style.position = 'relative'; card.style.left = '0'; card.style.top = '0'; placedSlot.appendChild(card); currentSlotContents.splice(slotIndex, 1, card);
         } else {
-          for (var j = 0; j < 4; j++) {
-            if (currentSlotContents[j] === card) currentSlotContents[j] = null;
-          }
-          card.style.position = 'relative';
-          card.style.left = '0';
-          card.style.top = '0';
-          pool.appendChild(card);
+          for (var j = 0; j < 4; j++) { if (currentSlotContents.at(j) === card) currentSlotContents.splice(j, 1, null); }
+          card.style.position = 'relative'; card.style.left = '0'; card.style.top = '0'; pool.appendChild(card);
         }
-
         var filledCount = 0;
-        for (var i = 0; i < 4; i++) {
-          if (currentSlotContents[i] !== null) filledCount++;
-        }
-
-        if (filledCount === 4) {
-          evaluateFoodChain(validChains);
-        }
+        for (var i = 0; i < 4; i++) { if (currentSlotContents.at(i) !== null) filledCount++; }
+        if (filledCount === 4) evaluateFoodChain(validChains);
       }
     }
 
     function evaluateFoodChain(validChains) {
-      document.querySelectorAll('.food-card').forEach(function(c) {
-        c.onmousedown = null;
-        c.ontouchstart = null;
-      });
-
+      document.querySelectorAll('.food-card').forEach(function(c) { c.onmousedown = null; c.ontouchstart = null; });
       var playerChain = currentSlotContents.map(function(c) { return c ? c.dataset.id : ''; });
-      var bestMatches = [false, false, false, false];
-      var maxCorrect = 0;
-
+      var bestMatches = [false, false, false, false], maxCorrect = 0;
       validChains.forEach(function(chain) {
-        var matchCount = 0;
-        var currentMatches = [false, false, false, false];
-        for (var i = 0; i < 4; i++) {
-          if (playerChain[i] === chain[i]) {
-            matchCount++;
-            currentMatches[i] = true;
-          }
-        }
-        if (matchCount > maxCorrect) {
-          maxCorrect = matchCount;
-          bestMatches = currentMatches;
-        } else if (matchCount === maxCorrect && maxCorrect === 0) {
-          bestMatches = currentMatches;
-        }
+        var matchCount = 0, currentMatches = [false, false, false, false];
+        for (var i = 0; i < 4; i++) { if (playerChain.at(i) === chain.at(i)) { matchCount++; currentMatches.splice(i, 1, true); } }
+        if (matchCount > maxCorrect) { maxCorrect = matchCount; bestMatches = currentMatches; }
       });
-
       var slots = document.querySelectorAll('.drop-slot');
       for (var j = 0; j < 4; j++) {
-        var s = slots[j];
-        if (bestMatches[j]) {
-          s.classList.add('slot-correct');
-        } else {
-          s.classList.add('slot-wrong');
-          var overlay = document.createElement('div');
-          overlay.className = 'wrong-overlay';
-          overlay.textContent = '❌';
-          s.appendChild(overlay);
-        }
+        var s = slots.item(j);
+        if (bestMatches.at(j)) s.classList.add('slot-correct');
+        else { s.classList.add('slot-wrong'); var overlay = document.createElement('div'); overlay.className = 'wrong-overlay'; overlay.textContent = '❌'; s.appendChild(overlay); }
       }
-
-      score += maxCorrect;
-      if(scoreText) scoreText.textContent = score;
-
-      var centerSlot = slots[1].getBoundingClientRect();
-      if (maxCorrect > 0) {
-        popText('+' + maxCorrect, centerSlot.left, centerSlot.top, 'plus');
-      } else {
-        popText('❌', centerSlot.left, centerSlot.top, 'minus');
-      }
-
-      currentQuestionIndex++;
-      setTimeout(loadQuestion, 1800);
+      score += maxCorrect; if(scoreText) scoreText.textContent = score;
+      var centerSlot = slots.item(1).getBoundingClientRect();
+      if (maxCorrect > 0) popText('+' + maxCorrect, centerSlot.left, centerSlot.top, 'plus');
+      else popText('❌', centerSlot.left, centerSlot.top, 'minus');
+      currentQuestionIndex++; setTimeout(loadQuestion, 1800);
     }
 
     function popText(txt, x, y, cls) {
-      var el = document.createElement('div');
-      el.className = 'floating-text ' + cls;
-      el.textContent = txt;
-      el.style.left = x + 'px';
-      el.style.top = y + 'px';
-      document.body.appendChild(el);
+      var el = document.createElement('div'); el.className = 'floating-text ' + cls; el.textContent = txt;
+      el.style.left = x + 'px'; el.style.top = y + 'px'; document.body.appendChild(el);
       setTimeout(function() { el.remove(); }, 1100);
     }
 
     function onFinish() {
       if(timerInterval) clearInterval(timerInterval);
-
       if (score >= 8) {
-        var bonus = 0;
-        if (attemptCount === 1) bonus = 4;
-        else if (attemptCount === 2) bonus = 2;
-        else if (attemptCount >= 3) bonus = 1;
-
-        score += bonus;
-        if(scoreText) scoreText.textContent = score;
-
+        var bonus = attemptCount === 1 ? 4 : (attemptCount === 2 ? 2 : 1);
+        score += bonus; if(scoreText) scoreText.textContent = score;
         if(modalTitle) modalTitle.textContent = "🎉 Selamat, Penjelajah!";
-        if(modalDesc) {
-          modalDesc.style.textAlign = "center";
-          modalDesc.innerHTML = "Kamu berhasil menyelesaikan tantangan Pos 2 dengan Skor Murni: <strong>" + (score - bonus) + " Poin</strong>!<br>" +
-                                "<span style='color:#2e7d32; font-weight:800;'>🎁 Bonus Lolos (Kesempatan ke-" + attemptCount + "): +" + bonus + " Poin!</span><br>" +
-                                "Total Poin Pos 2: <strong>" + score + "</strong>";
-        }
+        if(modalDesc) { modalDesc.style.textAlign = "center"; modalDesc.innerHTML = "Kamu berhasil menyelesaikan tantangan Pos 2 dengan Skor Murni: <strong>" + (score - bonus) + " Poin</strong>!<br><span style='color:#2e7d32; font-weight:800;'>🎁 Bonus Lolos (Kesempatan ke-" + attemptCount + "): +" + bonus + " Poin!</span><br>Total Poin Pos 2: <strong>" + score + "</strong>"; }
         if(btnModalAction) btnModalAction.textContent = "Lihat Rangkuman Materi";
         if(btnModalExit) btnModalExit.style.display = 'none';
         if(gameModal) gameModal.style.display = 'flex';
-
-        if(btnModalAction) {
-          btnModalAction.onclick = function() {
-            showMateriPopup();
-          };
-        }
-      } else {
-        onFail("Skor akhir kamu: " + score + " poin. Minimal harus 8 poin untuk lolos.");
-      }
+        if(btnModalAction) btnModalAction.onclick = function() { showMateriPopup(); };
+      } else { onFail("Skor akhir kamu: " + score + " poin. Minimal harus 8 poin untuk lolos."); }
     }
 
     function showMateriPopup() {
       if(modalTitle) modalTitle.textContent = "📚 Ulasan Materi: Simbiosis & Rantai Makanan";
       if(modalDesc) {
         modalDesc.style.textAlign = "left";
-        modalDesc.innerHTML = 
-          '<div class="materi-box">' +
-            '<div class="materi-item">' +
-              '<strong>1. Pola Interaksi Simbiosis</strong><br>' +
-              '• Mutualisme: Saling menguntungkan.<br>' +
-              '• Komensalisme: Satu untung, satu tidak dirugikan.<br>' +
-              '• Parasitisme: Satu untung, satu dirugikan.' +
-            '</div>' +
-            '<div class="materi-item">' +
-              '<strong>2. Tingkatan Rantai Makanan</strong><br>' +
-              '• Produsen: Tumbuhan/Alga penghasil makanan.<br>' +
-              '• Konsumen I: Herbivora.<br>' +
-              '• Konsumen II & III: Karnivora.' +
-            '</div>' +
-          '</div>';
+        modalDesc.innerHTML = '<div class="materi-box"><div class="materi-item"><strong>1. Pola Interaksi Simbiosis</strong><br>• Mutualisme: Saling menguntungkan.<br>• Komensalisme: Satu untung, satu tidak dirugikan.<br>• Parasitisme: Satu untung, satu dirugikan.</div><div class="materi-item"><strong>2. Tingkatan Rantai Makanan</strong><br>• Produsen: Tumbuhan/Alga penghasil makanan.<br>• Konsumen I: Herbivora.<br>• Konsumen II & III: Karnivora.</div></div>';
       }
-      
       if(btnModalAction) btnModalAction.textContent = "Lanjut Pos 3";
       if(btnModalExit) btnModalExit.style.display = 'none';
-
-      if(btnModalAction) {
-        btnModalAction.onclick = function() {
-          if(gameModal) gameModal.style.display = 'none';
-          if(arenaPanel) arenaPanel.style.display = 'none';
-          if(btnGoNext) btnGoNext.style.display = 'block';
-        };
-      }
+      if(btnModalAction) btnModalAction.onclick = function() { if(gameModal) gameModal.style.display = 'none'; if(arenaPanel) arenaPanel.style.display = 'none'; if(btnGoNext) btnGoNext.style.display = 'block'; };
     }
 
-    /* REVISI KHUSUS GAME OVER */
     function onFail(msg) {
-      if(timerInterval) clearInterval(timerInterval);
-      lives--;
-      if(livesText) livesText.textContent = lives;
-      attemptCount++;
-
+      if(timerInterval) clearInterval(timerInterval); lives--; if(livesText) livesText.textContent = lives; attemptCount++;
       if (lives > 0) {
-        // Jika nyawa masih ada, popup mengulang ronde di Pos 2
         if(modalTitle) modalTitle.textContent = "⚠️ Belum Berhasil!";
-        if(modalDesc) {
-          modalDesc.style.textAlign = "center";
-          modalDesc.innerHTML = msg + "<br>Nyawamu berkurang 1. Sisa nyawa: <strong>" + lives + "</strong>.";
-        }
-        if(btnModalAction) btnModalAction.textContent = "Coba Lagi";
-        if(btnModalExit) btnModalExit.style.display = 'none';
-        if(gameModal) gameModal.style.display = 'flex';
-
-        if(btnModalAction) {
-          btnModalAction.onclick = function() {
-            if(gameModal) gameModal.style.display = 'none';
-            startRound();
-          };
-        }
+        if(modalDesc) { modalDesc.style.textAlign = "center"; modalDesc.innerHTML = msg + "<br>Nyawamu berkurang 1. Sisa nyawa: <strong>" + lives + "</strong>."; }
+        if(btnModalAction) btnModalAction.textContent = "Coba Lagi"; if(btnModalExit) btnModalExit.style.display = 'none'; if(gameModal) gameModal.style.display = 'flex';
+        if(btnModalAction) btnModalAction.onclick = function() { if(gameModal) gameModal.style.display = 'none'; startRound(); };
       } else {
-        // Jika NYAWA HABIS (GAME OVER): Muncul 2 Tombol
         if(modalTitle) modalTitle.textContent = "💔 Game Over";
-        if(modalDesc) {
-          modalDesc.style.textAlign = "center";
-          modalDesc.innerHTML = "Nyawamu telah habis!";
-        }
-        
-        // Tombol 1: Coba Lagi -> Pindah ke pos01.html
-        if(btnModalAction) {
-          btnModalAction.textContent = "🔄 Coba Lagi";
-          btnModalAction.onclick = function() {
-            localStorage.removeItem('jelita_pos2_bgm_time');
-            window.location.href = 'pos01.html';
-          };
-        }
-        
-        // Tombol 2: Keluar -> Pindah ke index.html
-        if(btnModalExit) {
-          btnModalExit.style.display = 'inline-block';
-          btnModalExit.textContent = "🚪 Keluar";
-          btnModalExit.onclick = function() {
-            localStorage.removeItem('jelita_pos2_bgm_time');
-            window.location.href = 'index.html';
-          };
-        }
-
+        if(modalDesc) { modalDesc.style.textAlign = "center"; modalDesc.innerHTML = "Nyawamu telah habis!"; }
+        if(btnModalAction) { btnModalAction.textContent = "🔄 Coba Lagi"; btnModalAction.onclick = function() { localStorage.removeItem('jelita_pos2_bgm_time'); window.location.href = 'pos01.html'; }; }
+        if(btnModalExit) { btnModalExit.style.display = 'inline-block'; btnModalExit.textContent = "🚪 Keluar"; btnModalExit.onclick = function() { localStorage.removeItem('jelita_pos2_bgm_time'); window.location.href = 'index.html'; }; }
         if(gameModal) gameModal.style.display = 'flex';
       }
     }
 
-    // Jalankan Game Langsung
     startRound();
   </script>
 </body>

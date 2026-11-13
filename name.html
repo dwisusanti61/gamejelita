@@ -2,31 +2,126 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=overlays-content">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>JELITA - Masukkan Nama</title>
   <link rel="manifest" href="manifest.json">
   <link rel="prefetch" href="menu.html">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
-    html, body { width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; background-color: #2e7d32; font-family: 'Segoe UI', Roboto, sans-serif; }
-    .game-wrapper { position: relative; width: 100%; height: 100%; background: #2e7d32 url('assets/images/name.png') no-repeat center center; background-size: cover; }
+    html, body { 
+      width: 100%; 
+      height: 100%; 
+      overflow: hidden; 
+      background-color: #2e7d32; 
+      font-family: 'Segoe UI', Roboto, sans-serif; 
+    }
+    .game-wrapper { 
+      position: fixed; 
+      inset: 0;
+      width: 100%; 
+      height: 100%; 
+      background: #2e7d32 url('assets/images/name.png') no-repeat center center; 
+      background-size: 100% 100%; /* Mengunci gambar background agar pas dengan posisi kotak input */
+    }
 
-    .top-logo { position: absolute; top: 3.5%; z-index: 1000; pointer-events: none; height: 13dvh; max-height: 75px; width: auto; filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.4)); }
+    .top-logo { 
+      position: absolute; 
+      top: 4%; 
+      z-index: 1000; 
+      pointer-events: none; 
+      height: 13%; 
+      max-height: 75px; 
+      width: auto; 
+      filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.4)); 
+    }
     .logo-ipa { left: 3%; }
     .logo-jelita { right: 3%; }
 
-    .input-container { position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); width: min(65vw, 480px); z-index: 1000; text-align: center; }
-    .input-name { width: 100%; padding: 2dvh 20px; font-size: clamp(16px, 4.5dvh, 26px); font-weight: 800; color: #1b5e20; text-align: center; background: #ffffff; border: 4px solid #fbc02d; border-radius: 18px; outline: none; text-transform: capitalize; user-select: text; box-shadow: inset 0 4px 8px rgba(0,0,0,0.15), 0 8px 20px rgba(0,0,0,0.3); }
-    .input-name::placeholder { color: #9e9e9e; font-weight: normal; font-style: italic; font-size: clamp(13px, 3.5dvh, 20px); }
+    .input-container { 
+      position: absolute; 
+      top: 56%; 
+      left: 50%; 
+      transform: translate(-50%, -50%); 
+      width: min(55vw, 440px); 
+      z-index: 1000; 
+      text-align: center; 
+    }
+    .input-name { 
+      width: 100%; 
+      padding: 10px 16px; 
+      font-size: clamp(16px, 4vh, 24px); /* Minimal 16px agar HP tidak auto-zoom */
+      font-weight: 800; 
+      color: #1b5e20; 
+      text-align: center; 
+      background: #ffffff; 
+      border: 3px solid #fbc02d; 
+      border-radius: 16px; 
+      outline: none; 
+      text-transform: capitalize; 
+      user-select: text; 
+      -webkit-user-select: text;
+      box-shadow: inset 0 3px 6px rgba(0,0,0,0.15), 0 6px 15px rgba(0,0,0,0.3); 
+    }
+    .input-name::placeholder { 
+      color: #9e9e9e; 
+      font-weight: normal; 
+      font-style: italic; 
+      font-size: clamp(13px, 3.2vh, 18px); 
+    }
 
-    .btn-jelajah { position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%); background: none; border: none; cursor: pointer; outline: none; z-index: 1000; transition: transform 0.2s ease, filter 0.2s ease; }
-    .btn-jelajah img { height: 16dvh; max-height: 105px; width: auto; filter: drop-shadow(0px 6px 14px rgba(0,0,0,0.5)); }
+    .btn-jelajah { 
+      position: absolute; 
+      bottom: 6%; 
+      left: 50%; 
+      transform: translateX(-50%); 
+      background: none; 
+      border: none; 
+      cursor: pointer; 
+      outline: none; 
+      z-index: 1000; 
+      transition: transform 0.15s ease, filter 0.15s ease; 
+    }
+    .btn-jelajah img { 
+      height: 16vh; 
+      max-height: 95px; 
+      width: auto; 
+      filter: drop-shadow(0px 6px 14px rgba(0,0,0,0.5)); 
+    }
     .btn-jelajah:hover { transform: translateX(-50%) scale(1.08); filter: brightness(1.1); }
     .btn-jelajah:active { transform: translateX(-50%) scale(0.92); }
 
-    .toast-warning { display: none; position: fixed; top: 12%; left: 50%; transform: translateX(-50%); background: #e53935; color: #ffffff; padding: 10px 24px; border-radius: 14px; font-weight: bold; font-size: clamp(13px, 3.5dvh, 18px); box-shadow: 0 5px 15px rgba(0,0,0,0.4); z-index: 2000; }
+    .toast-warning { 
+      display: none; 
+      position: fixed; 
+      top: 12%; 
+      left: 50%; 
+      transform: translateX(-50%); 
+      background: #e53935; 
+      color: #ffffff; 
+      padding: 10px 24px; 
+      border-radius: 14px; 
+      font-weight: bold; 
+      font-size: clamp(13px, 3.5vh, 18px); 
+      box-shadow: 0 5px 15px rgba(0,0,0,0.4); 
+      z-index: 2000; 
+    }
 
-    #rotate-warning { display: none; position: fixed; inset: 0; background: #1b5e20; color: #ffffff; z-index: 99999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+    #rotate-warning { 
+      display: none; 
+      position: fixed; 
+      inset: 0; 
+      background: #1b5e20; 
+      color: #ffffff; 
+      z-index: 99999; 
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center; 
+      text-align: center; 
+      padding: 20px; 
+    }
     @media screen and (orientation: portrait) { #rotate-warning { display: flex; } }
   </style>
 </head>
@@ -38,7 +133,7 @@
     <p style="margin-top: 8px; font-size: 14px; opacity: 0.9;">Miringkan HP ke posisi mendatar (Landscape) agar game tampil penuh dan rapi.</p>
   </div>
 
-  <div class="game-wrapper">
+  <div class="game-wrapper" id="gameWrapper">
     <img src="assets/images/ipa.png" alt="IPA" class="top-logo logo-ipa" onerror="this.style.display='none'">
     <img src="assets/images/jelita.png" alt="JELITA" class="top-logo logo-jelita" onerror="this.style.display='none'">
 
@@ -58,6 +153,18 @@
   <div class="toast-warning" id="toastWarning">⚠️ Isi namamu dulu ya, Petualang!</div>
 
   <script>
+    // Kunci tinggi layar saat pertama kali dimuat agar tidak penyet saat keyboard HP muncul
+    function kunciTinggiLayar() {
+      const wrapper = document.getElementById('gameWrapper');
+      if (wrapper && window.innerWidth > window.innerHeight) {
+        wrapper.style.height = window.innerHeight + 'px';
+      }
+    }
+    window.addEventListener('load', kunciTinggiLayar);
+    window.addEventListener('orientationchange', () => {
+      setTimeout(kunciTinggiLayar, 300);
+    });
+
     function masukFullScreen() {
       const elem = document.documentElement;
       if (!document.fullscreenElement && elem.requestFullscreen) {

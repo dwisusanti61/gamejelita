@@ -2,131 +2,75 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>JELITA - Petunjuk Pos 3</title>
   <link rel="manifest" href="manifest.json">
   <link rel="prefetch" href="pos3.html">
   <link rel="prefetch" href="menu.html">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-      -webkit-user-select: none;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    html, body { width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; background-color: #00796b; font-family: 'Segoe UI', Roboto, sans-serif; }
+    .game-wrapper { position: relative; width: 100%; height: 100%; overflow: hidden; background: #00796b url('assets/images/pos03.png') no-repeat center center; background-size: 100% 100%; }
 
-    html, body {
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      background-color: #00796b;
-      font-family: 'Segoe UI', Roboto, sans-serif;
-    }
+    .bottom-left-logo { position: absolute; bottom: 3.5%; left: 2.5%; z-index: 1000; pointer-events: none; }
+    .bottom-left-logo img { height: 13dvh; max-height: 70px; width: auto; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.4)); }
 
-    .game-wrapper {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      background: #00796b url('assets/images/pos03.png') no-repeat center center;
-      background-size: cover;
-    }
+    .top-right-controls { position: absolute; top: 3.5%; right: 3%; display: flex; align-items: center; gap: 1.5dvh; z-index: 1000; }
+    .top-right-controls button { background: none; border: none; cursor: pointer; outline: none; transition: transform 0.15s ease; }
+    .top-right-controls button:hover { transform: scale(1.1); }
+    .top-right-controls img { height: 10dvh; max-height: 55px; width: auto; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.4)); }
 
-    /* POJOK KIRI BAWAH: jelita.png (DIPINDAHKAN KE BAWAH) */
-    .bottom-left-logo {
-      position: absolute;
-      bottom: 3.5%;
-      left: 2%;
-      z-index: 1000;
-    }
+    .btn-siap { position: absolute; bottom: 4.5%; right: 3%; background: none; border: none; cursor: pointer; z-index: 1000; outline: none; transition: transform 0.15s ease; }
+    .btn-siap:hover { transform: scale(1.08); }
+    .btn-siap img { height: 16dvh; max-height: 95px; width: auto; filter: drop-shadow(0px 6px 12px rgba(0,0,0,0.6)); }
 
-    .bottom-left-logo img {
-      height: min(10vw, 70px);
-      width: auto;
-      filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.4));
-    }
-
-    /* POJOK KANAN ATAS: home, sound, pause */
-    .top-right-controls {
-      position: absolute;
-      top: 3.5%;
-      right: 3%;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 1000;
-    }
-
-    .top-right-controls button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      outline: none;
-      transition: transform 0.2s ease;
-    }
-
-    .top-right-controls button:hover {
-      transform: scale(1.1);
-    }
-
-    .top-right-controls img {
-      height: min(8vw, 55px);
-      width: auto;
-      filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.4));
-    }
-
-    /* POJOK KANAN BAWAH: siap.png ke pos3.html */
-    .btn-siap {
-      position: absolute;
-      bottom: 4%;
-      right: 3%;
-      background: none;
-      border: none;
-      cursor: pointer;
-      z-index: 1000;
-      outline: none;
-      transition: transform 0.2s ease;
-    }
-
-    .btn-siap:hover {
-      transform: scale(1.08);
-    }
-
-    .btn-siap img {
-      height: min(15vw, 95px);
-      width: auto;
-      filter: drop-shadow(0px 6px 12px rgba(0,0,0,0.6));
-    }
+    #rotate-warning { display: none; position: fixed; inset: 0; background: #1b5e20; color: #ffffff; z-index: 99999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+    @media screen and (orientation: portrait) { #rotate-warning { display: flex; } }
   </style>
 </head>
 <body>
 
+  <div id="rotate-warning">
+    <div style="font-size: 56px; margin-bottom: 12px;">📱🔄</div>
+    <h2>Putar Layar HP Kamu</h2>
+    <p style="margin-top: 8px; font-size: 14px; opacity: 0.9;">Miringkan HP ke posisi mendatar (Landscape) agar game tampil penuh dan rapi.</p>
+  </div>
+
   <div class="game-wrapper">
-    <!-- AUDIO4.MP3 OTOMATIS DIPUTAR -->
     <audio id="bgMusic" loop preload="auto">
       <source src="assets/audio/audio4.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- POJOK KIRI BAWAH -->
     <div class="bottom-left-logo">
       <img src="assets/images/jelita.png" alt="JELITA Logo">
     </div>
 
-    <!-- POJOK KANAN ATAS -->
     <div class="top-right-controls">
       <button id="btnHome" onclick="goHome()" title="Menu Utama"><img src="assets/images/home.png" alt="Home"></button>
       <button id="btnSound" onclick="playAudio()" title="Nyalakan Suara"><img src="assets/images/sound.png" alt="Sound"></button>
       <button id="btnPause" onclick="pauseAudio()" title="Matikan Suara"><img src="assets/images/pause.png" alt="Pause"></button>
     </div>
 
-    <!-- POJOK KANAN BAWAH -->
     <button class="btn-siap" onclick="goToPos3Arena()" title="Siap Main">
       <img src="assets/images/siap.png" alt="Siap">
     </button>
   </div>
 
   <script>
+    function masukFullScreen() {
+      var elem = document.documentElement;
+      if (!document.fullscreenElement && elem.requestFullscreen) {
+        elem.requestFullscreen().catch(function() {});
+      } else if (!document.webkitFullscreenElement && elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      }
+    }
+    document.addEventListener('touchstart', masukFullScreen, { once: true });
+    document.addEventListener('click', masukFullScreen, { once: true });
+
     var bgMusic = document.getElementById('bgMusic');
 
     function playAudio() {
@@ -144,6 +88,7 @@
     }
 
     function goHome() {
+      masukFullScreen();
       if (bgMusic && !bgMusic.paused) {
         localStorage.setItem('jelita_pos3_bgm_time', bgMusic.currentTime.toString());
       }
@@ -151,6 +96,7 @@
     }
 
     function goToPos3Arena() {
+      masukFullScreen();
       if (bgMusic && !bgMusic.paused) {
         localStorage.setItem('jelita_pos3_bgm_time', bgMusic.currentTime.toString());
       }
