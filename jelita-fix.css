@@ -1,0 +1,26 @@
+/* Sembunyikan isi sejenak sampai gambar latar siap agar tombol tidak muncul duluan */
+body {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+body.bg-ready {
+  opacity: 1;
+}
+
+/* Mode 2 Latar + Panggung 16:9 otomatis untuk halaman yang membutuhkannya */
+body.mode-dua-latar {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background-size: cover !important;
+  background-position: center center !important;
+}
+
+body.mode-dua-latar .game-wrapper,
+body.mode-dua-latar .game-container,
+body.mode-dua-latar .finish-container {
+  width: min(100vw, 177.78vh) !important;
+  height: min(100vh, 56.25vw) !important;
+  background-size: 100% 100% !important;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
