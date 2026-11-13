@@ -1,77 +1,28 @@
 <!DOCTYPE html>
 <html lang="id">
-  <link rel="stylesheet" href="jelita-fix.css">
-  <script src="jelita-fix.js" defer></script>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>JELITA - Splash Screen</title>
+  <title>JELITA - Petualangan Ekologi</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="prefetch" href="name.html">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
-    html, body { 
-      width: 100vw; 
-      height: 100vh; 
-      height: 100dvh; 
-      overflow: hidden; 
-      background-color: #2e7d32; 
-      font-family: 'Segoe UI', Roboto, sans-serif; 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      background-color: #1b5e20;
     }
-    .game-wrapper { 
-      position: relative; 
-      width: 100%; 
-      height: 100%; 
-      background: #2e7d32 url('assets/images/splash.png') no-repeat center center; 
-      background-size: cover; 
+    #gameFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
     }
-    
-    /* Ukuran disesuaikan dengan tinggi layar (dvh) agar pas di HP Landscape maupun Laptop */
-    .top-logos-container { 
-      position: absolute; 
-      top: 5%; 
-      left: 50%; 
-      transform: translateX(-50%); 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      gap: 3dvh; 
-      z-index: 1000; 
-      pointer-events: none; 
-    }
-    .logo-item { 
-      height: 15dvh; 
-      max-height: 110px; 
-      width: auto; 
-      object-fit: contain; 
-      filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.4)); 
-    }
-    
-    .btn-action { 
-      position: absolute; 
-      background: none; 
-      border: none; 
-      cursor: pointer; 
-      outline: none; 
-      z-index: 1000; 
-      transition: transform 0.15s ease, filter 0.15s ease; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-    }
-    .btn-action:hover { transform: scale(1.08); filter: brightness(1.1); }
-    .btn-action:active { transform: scale(0.92); }
-    .btn-action img { width: auto; display: block; filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.6)); }
-    
-    .btn-petunjuk { bottom: 5%; left: 4%; }
-    .btn-petunjuk img { height: 16dvh; max-height: 105px; }
-    .btn-mulai { bottom: 5%; right: 4%; }
-    .btn-mulai img { height: 14dvh; max-height: 90px; }
-
-    /* Peringatan otomatis jika HP dalam posisi berdiri (Portrait) */
     #rotate-warning {
       display: none;
       position: fixed;
@@ -84,71 +35,10 @@
       align-items: center;
       text-align: center;
       padding: 20px;
+      font-family: 'Segoe UI', Roboto, sans-serif;
     }
     @media screen and (orientation: portrait) {
       #rotate-warning { display: flex; }
-    }
-
-    /* Perbaikan Modal Petunjuk: Cepat (tanpa blur berat) & tombol tidak pernah tertutup di layar pendek */
-    .modal-overlay { 
-      display: none; 
-      position: fixed; 
-      inset: 0; 
-      background: rgba(0, 0, 0, 0.8); 
-      z-index: 9999; 
-      justify-content: center; 
-      align-items: center; 
-      padding: 12px;
-    }
-    .modal-content { 
-      position: relative; 
-      width: min(88vw, 540px); 
-      max-height: 88dvh;
-      display: flex;
-      flex-direction: column;
-      background: #ffffff; 
-      border: 4px solid #fbc02d; 
-      border-radius: 18px; 
-      padding: 14px 18px; 
-      box-shadow: 0 10px 25px rgba(0,0,0,0.6); 
-      text-align: center; 
-      color: #212121; 
-    }
-    .modal-title { 
-      font-size: clamp(15px, 3.8dvh, 21px); 
-      font-weight: 800; 
-      color: #1b5e20; 
-      margin-bottom: 8px; 
-      text-transform: uppercase; 
-      flex-shrink: 0;
-    }
-    .modal-body-card { 
-      background: #fefde8; 
-      border: 2px dashed #fbc02d; 
-      border-radius: 12px; 
-      padding: 10px 12px; 
-      font-size: clamp(12px, 3.1dvh, 15px); 
-      line-height: 1.45; 
-      color: #1a252c; 
-      text-align: left; 
-      overflow-y: auto; 
-      flex: 1;
-      font-weight: 500; 
-    }
-    .modal-body-card p { margin-bottom: 6px; }
-    .modal-body-card p:last-child { margin-bottom: 0; }
-    .btn-close-modal { 
-      margin-top: 10px; 
-      padding: 8px 28px; 
-      background: #2e7d32; 
-      color: #ffffff; 
-      font-size: clamp(13px, 3.4dvh, 16px); 
-      font-weight: bold; 
-      border: none; 
-      border-radius: 12px; 
-      cursor: pointer; 
-      flex-shrink: 0;
-      align-self: center;
     }
   </style>
 </head>
@@ -160,105 +50,29 @@
     <p style="margin-top: 8px; font-size: 14px; opacity: 0.9;">Miringkan HP ke posisi mendatar (Landscape) agar game tampil penuh dan rapi.</p>
   </div>
 
-  <div class="game-wrapper">
-    <div class="top-logos-container">
-      <img src="assets/images/logo1.png" alt="Logo 1" class="logo-item" onerror="this.style.display='none'">
-      <img src="assets/images/logo2.png" alt="Logo 2" class="logo-item" onerror="this.style.display='none'">
-    </div>
-
-    <audio id="bgMusic" loop preload="auto">
-      <source src="assets/audio/audio1.mp3" type="audio/mpeg">
-    </audio>
-
-    <button class="btn-action btn-petunjuk" id="btnPetunjuk" title="Petunjuk Permainan">
-      <img src="assets/images/petunjuk.png" alt="Petunjuk">
-    </button>
-    <button class="btn-action btn-mulai" id="btnMulai" title="Mulai Permainan">
-      <img src="assets/images/mulai.png" alt="Mulai">
-    </button>
-  </div>
-
-  <div class="modal-overlay" id="modalPetunjuk">
-    <div class="modal-content">
-      <div class="modal-title">🌲 SELAMAT DATANG DI JELITA 🌲</div>
-      <div class="modal-body-card">
-        <p>Halo, Petualang Muda!</p>
-        <p><strong>Raka</strong> dan <strong>Nadia</strong> adalah Duta Pelindung Wana Kahyangan yang sedang berjuang menjaga kelestarian ekosistem di Bumi Kahyangan Dlepih, Tirtomoyo.</p>
-        <p>Apakah kamu siap bergabung dan membantu perjuangan mereka?</p>
-        <p>Raka dan Nadia akan mendampingimu memecahkan misteri alam di setiap pos, hingga kamu terbukti layak diangkat menjadi bagian dari Duta Pelindung Wana Kahyangan!</p>
-        <p><strong>Siapkan kompasmu dan mulailah petualanganmu sekarang!</strong></p>
-      </div>
-      <button class="btn-close-modal" id="btnCloseModal">Siap, Mulai!</button>
-    </div>
-  </div>
+  <iframe id="gameFrame" src="intro.html" allow="autoplay; fullscreen"></iframe>
 
   <script>
-    // Otomatis masuk mode Full Screen saat layar pertama kali disentuh di HP
-    function masukFullScreen() {
-      const elem = document.documentElement;
-      if (!document.fullscreenElement && elem.requestFullscreen) {
-        elem.requestFullscreen().catch(() => {});
-      } else if (!document.webkitFullscreenElement && elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
+    function aktifkanFullScreenUtama() {
+      var elem = document.documentElement;
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen().catch(function() {});
+        } else if (elem.webkitRequestFullscreen) {
+          elem.webkitRequestFullscreen();
+        }
       }
     }
-    document.addEventListener('touchstart', masukFullScreen, { once: true });
-    document.addEventListener('click', masukFullScreen, { once: true });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const btnMulai = document.getElementById('btnMulai');
-      const btnPetunjuk = document.getElementById('btnPetunjuk');
-      const modalPetunjuk = document.getElementById('modalPetunjuk');
-      const btnCloseModal = document.getElementById('btnCloseModal');
-      const bgMusic = document.getElementById('bgMusic');
-
-      bgMusic.volume = 0.5;
-      const savedTime = parseFloat(localStorage.getItem('jelita_bgm_time') || 0);
-      const isMuted = localStorage.getItem('jelita_bgm_muted') === 'true';
-
-      function playMusic() {
-        if (!isMuted) {
-          if (savedTime > 0) {
-            try { bgMusic.currentTime = savedTime; } catch(e){}
-          }
-          bgMusic.play().catch(() => {});
-        }
+    // Aktifkan fullscreen sekali saat sentuhan/klik pertama di halaman pembuka
+    window.addEventListener('message', function(event) {
+      if (event.data === 'REQUEST_FULLSCREEN') {
+        aktifkanFullScreenUtama();
       }
-
-      if (bgMusic.readyState >= 1) {
-        playMusic();
-      } else {
-        bgMusic.addEventListener('loadedmetadata', playMusic, { once: true });
-      }
-
-      bgMusic.addEventListener('timeupdate', () => {
-        if (!bgMusic.paused && bgMusic.currentTime > 0) {
-          localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString());
-        }
-      });
-
-      btnPetunjuk.addEventListener('click', (e) => {
-        e.preventDefault();
-        masukFullScreen();
-        localStorage.setItem('jelita_bgm_muted', 'false');
-        bgMusic.play().catch(() => {});
-        modalPetunjuk.style.display = 'flex';
-      });
-
-      btnCloseModal.addEventListener('click', () => {
-        modalPetunjuk.style.display = 'none';
-      });
-
-      btnMulai.addEventListener('click', (e) => {
-        e.preventDefault();
-        masukFullScreen();
-        localStorage.setItem('jelita_bgm_muted', 'false');
-        if (!bgMusic.paused) {
-          localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString());
-        }
-        window.location.href = 'name.html';
-      });
     });
+
+    document.addEventListener('click', aktifkanFullScreenUtama, { once: true });
+    document.addEventListener('touchstart', aktifkanFullScreenUtama, { once: true });
   </script>
 </body>
 </html>
