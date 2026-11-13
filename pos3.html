@@ -10,7 +10,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>JELITA - Pos 3: Selo Payung Kahyangan</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="prefetch" href="pos04.html">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     html, body { width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; background-color: #1b5e20; font-family: 'Segoe UI', Roboto, sans-serif; }
@@ -70,7 +69,7 @@
   </div>
 
   <div class="game-container">
-    <audio id="bgMusic" loop preload="auto">
+    <audio id="bgMusic" loop preload="metadata">
       <source src="assets/audio/audio4.mp3" type="audio/mpeg">
     </audio>
 
@@ -116,17 +115,6 @@
   </div>
 
   <script>
-    function masukFullScreen() {
-      var elem = document.documentElement;
-      if (!document.fullscreenElement && elem.requestFullscreen) {
-        elem.requestFullscreen().catch(function() {});
-      } else if (!document.webkitFullscreenElement && elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
-      }
-    }
-    document.addEventListener('touchstart', masukFullScreen, { once: true });
-    document.addEventListener('click', masukFullScreen, { once: true });
-
     var trashData = [
       { name: 'Sisa Nasi', file: 'sisanasi.png', cat: 'green' },
       { name: 'Kulit Pisang', file: 'kulitpisang.png', cat: 'green' },
@@ -246,6 +234,7 @@
       currentIndex++;
       setTimeout(function() { loadNextTrash(); }, 400);
     }
+
     function startTimer() {
       var livesEl = document.getElementById('txtLives');
       if (livesEl) livesEl.innerText = lives;
@@ -308,7 +297,6 @@
     function goIndex() { try { localStorage.setItem('jelita_pos3_lives', '3'); sessionStorage.removeItem('jelita_pos3_in_retry'); } catch(e){} window.location.href = 'index.html'; }
 
     function goToFinish() {
-      masukFullScreen();
       try { sessionStorage.removeItem('jelita_pos3_in_retry'); } catch(e){}
       var dummyAudio = new Audio('assets/audio/audio5.mp3');
       dummyAudio.volume = 0;

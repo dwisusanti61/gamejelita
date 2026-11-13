@@ -10,7 +10,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>JELITA - Splash Screen</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="prefetch" href="name.html">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     html, body { 
@@ -29,7 +28,6 @@
       background-size: cover; 
     }
     
-    /* Ukuran disesuaikan dengan tinggi layar (dvh) agar pas di HP Landscape maupun Laptop */
     .top-logos-container { 
       position: absolute; 
       top: 5%; 
@@ -71,7 +69,6 @@
     .btn-mulai { bottom: 5%; right: 4%; }
     .btn-mulai img { height: 14dvh; max-height: 90px; }
 
-    /* Peringatan otomatis jika HP dalam posisi berdiri (Portrait) */
     #rotate-warning {
       display: none;
       position: fixed;
@@ -89,7 +86,6 @@
       #rotate-warning { display: flex; }
     }
 
-    /* Perbaikan Modal Petunjuk: Cepat (tanpa blur berat) & tombol tidak pernah tertutup di layar pendek */
     .modal-overlay { 
       display: none; 
       position: fixed; 
@@ -166,7 +162,7 @@
       <img src="assets/images/logo2.png" alt="Logo 2" class="logo-item" onerror="this.style.display='none'">
     </div>
 
-    <audio id="bgMusic" loop preload="auto">
+    <audio id="bgMusic" loop preload="metadata">
       <source src="assets/audio/audio1.mp3" type="audio/mpeg">
     </audio>
 
@@ -193,18 +189,6 @@
   </div>
 
   <script>
-    // Otomatis masuk mode Full Screen saat layar pertama kali disentuh di HP
-    function masukFullScreen() {
-      const elem = document.documentElement;
-      if (!document.fullscreenElement && elem.requestFullscreen) {
-        elem.requestFullscreen().catch(() => {});
-      } else if (!document.webkitFullscreenElement && elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
-      }
-    }
-    document.addEventListener('touchstart', masukFullScreen, { once: true });
-    document.addEventListener('click', masukFullScreen, { once: true });
-
     document.addEventListener('DOMContentLoaded', () => {
       const btnMulai = document.getElementById('btnMulai');
       const btnPetunjuk = document.getElementById('btnPetunjuk');
@@ -213,23 +197,17 @@
       const bgMusic = document.getElementById('bgMusic');
 
       bgMusic.volume = 0.5;
-      const savedTime = parseFloat(localStorage.getItem('jelita_bgm_time') || 0);
-      const isMuted = localStorage.getItem('jelita_bgm_muted') === 'true';
+      localStorage.setItem('jelita_bgm_muted', 'false');
 
-      function playMusic() {
-        if (!isMuted) {
-          if (savedTime > 0) {
-            try { bgMusic.currentTime = savedTime; } catch(e){}
-          }
+      function mulaiMusikSembarang() {
+        if (bgMusic.paused) {
           bgMusic.play().catch(() => {});
         }
       }
 
-      if (bgMusic.readyState >= 1) {
-        playMusic();
-      } else {
-        bgMusic.addEventListener('loadedmetadata', playMusic, { once: true });
-      }
+      mulaiMusikSembarang();
+      document.addEventListener('click', mulaiMusikSembarang);
+      document.addEventListener('touchstart', mulaiMusikSembarang);
 
       bgMusic.addEventListener('timeupdate', () => {
         if (!bgMusic.paused && bgMusic.currentTime > 0) {
@@ -239,9 +217,7 @@
 
       btnPetunjuk.addEventListener('click', (e) => {
         e.preventDefault();
-        masukFullScreen();
-        localStorage.setItem('jelita_bgm_muted', 'false');
-        bgMusic.play().catch(() => {});
+        mulaiMusikSembarang();
         modalPetunjuk.style.display = 'flex';
       });
 
@@ -251,9 +227,8 @@
 
       btnMulai.addEventListener('click', (e) => {
         e.preventDefault();
-        masukFullScreen();
         localStorage.setItem('jelita_bgm_muted', 'false');
-        if (!bgMusic.paused) {
+        if (bgMusic.currentTime > 0) {
           localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString());
         }
         window.location.href = 'name.html';

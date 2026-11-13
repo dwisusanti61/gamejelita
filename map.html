@@ -10,8 +10,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>JELITA - Peta Petualangan</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="prefetch" href="pos01.html">
-  <link rel="prefetch" href="menu.html">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     html, body { 
@@ -62,7 +60,7 @@
   <div class="game-wrapper">
     <img src="assets/images/jelita.png" alt="Logo JELITA" class="logo-jelita-top">
 
-    <audio id="bgMusic" loop preload="auto">
+    <audio id="bgMusic" loop preload="metadata">
       <source src="assets/audio/audio1.mp3" type="audio/mpeg">
     </audio>
 
@@ -77,17 +75,6 @@
   </div>
 
   <script>
-    function masukFullScreen() {
-      const elem = document.documentElement;
-      if (!document.fullscreenElement && elem.requestFullscreen) {
-        elem.requestFullscreen().catch(() => {});
-      } else if (!document.webkitFullscreenElement && elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
-      }
-    }
-    document.addEventListener('touchstart', masukFullScreen, { once: true });
-    document.addEventListener('click', masukFullScreen, { once: true });
-
     document.addEventListener('DOMContentLoaded', () => {
       const bgMusic = document.getElementById('bgMusic');
       const btnHome = document.getElementById('btnHome');
@@ -100,25 +87,21 @@
       const savedTime = parseFloat(localStorage.getItem('jelita_bgm_time') || 0);
       const isMuted = localStorage.getItem('jelita_bgm_muted') === 'true';
 
-      function playMusic() {
+      function lanjutkanMusik() {
         if (!isMuted) {
-          if (savedTime > 0) {
-            try { bgMusic.currentTime = savedTime; } catch(e){}
+          if (savedTime > 0 && Math.abs(bgMusic.currentTime - savedTime) > 0.5) {
+            try { bgMusic.currentTime = savedTime; } catch(e) {}
           }
-          bgMusic.play().catch(() => {
-            const unlock = () => {
-              bgMusic.play();
-              document.removeEventListener('click', unlock);
-              document.removeEventListener('touchstart', unlock);
-            };
-            document.addEventListener('click', unlock);
-            document.addEventListener('touchstart', unlock);
-          });
+          if (bgMusic.paused) {
+            bgMusic.play().catch(() => {});
+          }
         }
       }
 
-      if (bgMusic.readyState >= 1) playMusic();
-      else bgMusic.addEventListener('loadedmetadata', playMusic, { once: true });
+      bgMusic.addEventListener('loadedmetadata', lanjutkanMusik, { once: true });
+      lanjutkanMusik();
+      document.addEventListener('click', lanjutkanMusik);
+      document.addEventListener('touchstart', lanjutkanMusik);
 
       bgMusic.addEventListener('timeupdate', () => {
         if (!bgMusic.paused && bgMusic.currentTime > 0) {
@@ -126,11 +109,11 @@
         }
       });
 
-      if (btnHome) btnHome.addEventListener('click', () => { masukFullScreen(); if (!bgMusic.paused) localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString()); window.location.href = 'menu.html'; });
+      if (btnHome) btnHome.addEventListener('click', () => { if (bgMusic.currentTime > 0) localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString()); window.location.href = 'menu.html'; });
       if (btnSound) btnSound.addEventListener('click', () => { localStorage.setItem('jelita_bgm_muted', 'false'); bgMusic.play(); });
       if (btnPause) btnPause.addEventListener('click', () => { localStorage.setItem('jelita_bgm_muted', 'true'); bgMusic.pause(); });
-      if (btnBack) btnBack.addEventListener('click', () => { masukFullScreen(); if (!bgMusic.paused) localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString()); window.location.href = 'menu.html'; });
-      if (btnGo) btnGo.addEventListener('click', () => { masukFullScreen(); if (!bgMusic.paused) localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString()); window.location.href = 'pos01.html'; });
+      if (btnBack) btnBack.addEventListener('click', () => { if (bgMusic.currentTime > 0) localStorage.setItem('jelita_bgm_time', bgMusic.currentTime.toString()); window.location.href = 'menu.html'; });
+      if (btnGo) btnGo.addEventListener('click', () => { localStorage.setItem('jelita_bgm_time', '0'); window.location.href = 'pos01.html'; });
     });
   </script>
 </body>

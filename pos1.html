@@ -10,7 +10,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>JELITA - Pos 1: Arena Playgame</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="prefetch" href="pos02.html">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     html, body { width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; background-color: #2e7d32; font-family: 'Segoe UI', Roboto, sans-serif; }
@@ -65,7 +64,7 @@
   </div>
 
   <div class="game-wrapper" id="gameWrapper">
-    <audio id="bgMusic" loop preload="auto">
+    <audio id="bgMusic" loop preload="metadata">
       <source src="assets/audio/audio2.mp3" type="audio/mpeg">
     </audio>
 
@@ -99,17 +98,6 @@
   </div>
 
   <script>
-    function masukFullScreen() {
-      var elem = document.documentElement;
-      if (!document.fullscreenElement && elem.requestFullscreen) {
-        elem.requestFullscreen().catch(function() {});
-      } else if (!document.webkitFullscreenElement && elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
-      }
-    }
-    document.addEventListener('touchstart', masukFullScreen, { once: true });
-    document.addEventListener('click', masukFullScreen, { once: true });
-
     var componentsDB = [
       { id: 'b1', name: 'beringin', type: 'biotik', img: 'assets/images/items/beringin.png' },
       { id: 'b2', name: 'capung', type: 'biotik', img: 'assets/images/items/capung.png' },
@@ -159,7 +147,6 @@
         document.addEventListener('click', function unlock() { bgMusic.play(); document.removeEventListener('click', unlock); }, { once: true });
       });
     }
-
     function startRound() {
       score = 0; correctCount = 0; currentIndex = 0; timer = 90;
       scoreText.textContent = score; livesText.textContent = lives; timerText.textContent = timer;

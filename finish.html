@@ -10,8 +10,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>JELITA - Puncak Ekspedisi Kahyangan</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="prefetch" href="menu.html">
-  <link rel="prefetch" href="index.html">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     html, body { width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; font-family: 'Segoe UI', Roboto, sans-serif; background-color: #1b5e20; }
@@ -151,7 +149,7 @@
     Visual: DALL-E | Audio: Pixabay (Free Royalty)
   </div>
 
-  <audio id="bgMusic" loop preload="auto">
+  <audio id="bgMusic" loop preload="metadata">
     <source src="assets/audio/audio5.mp3" type="audio/mpeg">
   </audio>
 
@@ -186,17 +184,6 @@
     </div>
   </div>
   <script>
-    function masukFullScreen() {
-      var elem = document.documentElement;
-      if (!document.fullscreenElement && elem.requestFullscreen) {
-        elem.requestFullscreen().catch(function() {});
-      } else if (!document.webkitFullscreenElement && elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
-      }
-    }
-    document.addEventListener('touchstart', masukFullScreen, { once: true });
-    document.addEventListener('click', masukFullScreen, { once: true });
-
     window.onload = function() {
       initAudio();
       displayFinalStats();
@@ -285,7 +272,6 @@
     }
 
     function restartGame() {
-      masukFullScreen();
       try {
         localStorage.removeItem('jelita_score_pos1');
         localStorage.removeItem('jelita_score_pos2');
@@ -297,7 +283,6 @@
     }
 
     function exitToMenu() {
-      masukFullScreen();
       window.location.href = 'index.html';
     }
   </script>

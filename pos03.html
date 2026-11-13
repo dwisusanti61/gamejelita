@@ -10,8 +10,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>JELITA - Petunjuk Pos 3</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="prefetch" href="pos3.html">
-  <link rel="prefetch" href="menu.html">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     html, body { width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; background-color: #00796b; font-family: 'Segoe UI', Roboto, sans-serif; }
@@ -42,7 +40,7 @@
   </div>
 
   <div class="game-wrapper">
-    <audio id="bgMusic" loop preload="auto">
+    <audio id="bgMusic" loop preload="metadata">
       <source src="assets/audio/audio4.mp3" type="audio/mpeg">
     </audio>
 
@@ -62,17 +60,6 @@
   </div>
 
   <script>
-    function masukFullScreen() {
-      var elem = document.documentElement;
-      if (!document.fullscreenElement && elem.requestFullscreen) {
-        elem.requestFullscreen().catch(function() {});
-      } else if (!document.webkitFullscreenElement && elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
-      }
-    }
-    document.addEventListener('touchstart', masukFullScreen, { once: true });
-    document.addEventListener('click', masukFullScreen, { once: true });
-
     var bgMusic = document.getElementById('bgMusic');
 
     function playAudio() {
@@ -90,7 +77,6 @@
     }
 
     function goHome() {
-      masukFullScreen();
       if (bgMusic && !bgMusic.paused) {
         localStorage.setItem('jelita_pos3_bgm_time', bgMusic.currentTime.toString());
       }
@@ -98,7 +84,6 @@
     }
 
     function goToPos3Arena() {
-      masukFullScreen();
       if (bgMusic && !bgMusic.paused) {
         localStorage.setItem('jelita_pos3_bgm_time', bgMusic.currentTime.toString());
       }

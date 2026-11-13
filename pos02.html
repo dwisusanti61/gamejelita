@@ -10,8 +10,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>JELITA - Pos 2: Kedung Pasiraman</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="prefetch" href="pos2.html">
-  <link rel="prefetch" href="menu.html">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     html, body { width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; background-color: #00796b; font-family: 'Segoe UI', Roboto, sans-serif; }
@@ -47,7 +45,7 @@
   <div class="game-wrapper">
     <img src="assets/images/jelita.png" alt="Logo JELITA" class="logo-jelita-top">
 
-    <audio id="bgMusic" loop preload="auto">
+    <audio id="bgMusic" loop preload="metadata">
       <source src="assets/audio/audio3.mp3" type="audio/mpeg">
     </audio>
 
@@ -63,17 +61,6 @@
   </div>
 
   <script>
-    function masukFullScreen() {
-      var elem = document.documentElement;
-      if (!document.fullscreenElement && elem.requestFullscreen) {
-        elem.requestFullscreen().catch(function() {});
-      } else if (!document.webkitFullscreenElement && elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
-      }
-    }
-    document.addEventListener('touchstart', masukFullScreen, { once: true });
-    document.addEventListener('click', masukFullScreen, { once: true });
-
     document.addEventListener('DOMContentLoaded', function() {
       var btnHome = document.getElementById('btnHome');
       var btnSound = document.getElementById('btnSound');
@@ -132,7 +119,6 @@
       if (btnHome) {
         btnHome.addEventListener('click', function(e) {
           e.preventDefault();
-          masukFullScreen();
           localStorage.removeItem('jelita_pos2_bgm_time');
           window.location.href = 'menu.html';
         });
@@ -141,7 +127,6 @@
       if (btnSiapNadia) {
         btnSiapNadia.addEventListener('click', function(e) {
           e.preventDefault();
-          masukFullScreen();
           if (!bgMusic.paused) {
             localStorage.setItem('jelita_pos2_bgm_time', bgMusic.currentTime.toString());
           }
