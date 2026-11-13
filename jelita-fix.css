@@ -1,75 +1,20 @@
-(function() {
-  // 1. AUTO-PAUSE AUDIO SAAT KELUAR / KUNCI LAYAR HP
-  document.addEventListener('visibilitychange', function() {
-    var musik = document.getElementById('bgMusic');
-    if (!musik) return;
-    if (document.hidden) {
-      musik.pause();
-    } else if (localStorage.getItem('jelita_bgm_muted') !== 'true') {
-      musik.play().catch(function() {});
-    }
-  });
+/* Sembunyikan sejenak sampai gambar latar siap agar tombol tidak muncul duluan */
+html, body {
+  background-color: #1b5e20 !important;
+}
 
-  // 2. TERUSKAN PERMINTAAN FULLSCREEN KE INDUK IFRAME (CUKUP 1X DI AWAL)
-  function mintaFullScreenKeInduk() {
-    try {
-      if (window.parent && window.parent !== window) {
-        window.parent.postMessage('REQUEST_FULLSCREEN', '*');
-      }
-    } catch (e) {}
-  }
-  document.addEventListener('click', mintaFullScreenKeInduk, { once: true });
-  document.addEventListener('touchstart', mintaFullScreenKeInduk, { once: true });
+body {
+  opacity: 0;
+  transition: opacity 0.25s ease-in-out;
+}
 
-  // 3. TUNGGU GAMBAR LATAR SELESAI DIMUAT + PRELOAD HALAMAN BERIKUTNYA
-  window.addEventListener('DOMContentLoaded', function() {
-    var namaFile = (window.location.pathname.split('/').pop() || 'intro.html').toLowerCase();
-    var gambarLatar = '';
-    var gambarBerikutnya = [];
+body.bg-ready {
+  opacity: 1;
+}
 
-    if (namaFile.includes('intro') || namaFile.includes('index')) {
-      gambarLatar = 'assets/images/splash.png';
-      gambarBerikutnya = ['assets/images/name.png', 'assets/images/menu.png'];
-    } else if (namaFile.includes('name')) {
-      gambarLatar = 'assets/images/name.png';
-      gambarBerikutnya = ['assets/images/menu.png', 'assets/images/map.png'];
-    } else if (namaFile.includes('menu')) {
-      gambarLatar = 'assets/images/menu.png';
-      gambarBerikutnya = ['assets/images/map.png', 'assets/images/pos01.png'];
-    } else if (namaFile.includes('map')) {
-      gambarLatar = 'assets/images/map.png';
-      gambarBerikutnya = ['assets/images/pos01.png', 'assets/images/pos02.png', 'assets/images/pos03.png'];
-    } else if (namaFile.includes('pos01') || namaFile.includes('pos1')) {
-      gambarLatar = 'assets/images/pos01.png';
-      gambarBerikutnya = ['assets/images/map.png', 'assets/images/pos02.png'];
-    } else if (namaFile.includes('pos02') || namaFile.includes('pos2')) {
-      gambarLatar = 'assets/images/pos02.png';
-      gambarBerikutnya = ['assets/images/map.png', 'assets/images/pos03.png'];
-    } else if (namaFile.includes('pos03') || namaFile.includes('pos3')) {
-      gambarLatar = 'assets/images/pos03.png';
-      gambarBerikutnya = ['assets/images/finish.png'];
-    } else if (namaFile.includes('finish')) {
-      gambarLatar = 'assets/images/finish.png';
-      gambarBerikutnya = ['assets/images/name.png'];
-    }
-
-    function tampilkanHalaman() {
-      document.body.classList.add('bg-ready');
-      // Diam-diam unduh gambar halaman berikutnya di latar belakang
-      gambarBerikutnya.forEach(function(src) {
-        var pre = new Image();
-        pre.src = src;
-      });
-    }
-
-    if (gambarLatar) {
-      var img = new Image();
-      img.src = gambarLatar;
-      img.onload = tampilkanHalaman;
-      img.onerror = tampilkanHalaman;
-      setTimeout(tampilkanHalaman, 3500);
-    } else {
-      tampilkanHalaman();
-    }
-  });
-})();
+/* Area aman agar tombol atas tidak terpotong poni/notch atau bar HP */
+.top-nav-group,
+.brand-logo,
+.top-logo {
+  margin-top: env(safe-area-inset-top, 0px);
+}
