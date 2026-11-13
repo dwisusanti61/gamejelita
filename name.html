@@ -141,8 +141,6 @@
 
       bgMusic.addEventListener('loadedmetadata', lanjutkanMusik, { once: true });
       lanjutkanMusik();
-      document.addEventListener('click', lanjutkanMusik);
-      document.addEventListener('touchstart', lanjutkanMusik);
 
       bgMusic.addEventListener('timeupdate', function() {
         if (!bgMusic.paused && bgMusic.currentTime > 0) {
