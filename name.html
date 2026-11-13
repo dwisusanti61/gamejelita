@@ -8,8 +8,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>JELITA - Masukkan Nama</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="preload" as="image" href="assets/images/name.png">
-  <link rel="prefetch" href="menu.html">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     
@@ -22,7 +20,6 @@
       font-family: 'Segoe UI', Roboto, sans-serif; 
     }
 
-    /* 1 Latar Penuh Bersih (Tanpa Dobel/Bayangan) */
     .game-wrapper {
       position: relative;
       width: 100%;
@@ -30,7 +27,7 @@
       background: #2e7d32 url('assets/images/name.png') no-repeat center center;
       background-size: 100% 100%;
       opacity: 0;
-      transition: opacity 0.2s ease;
+      transition: opacity 0.15s ease;
     }
     .game-wrapper.ready { opacity: 1; }
 
@@ -38,7 +35,6 @@
     .logo-ipa { left: 3%; }
     .logo-jelita { right: 3%; }
 
-    /* Lebar kotak input disesuaikan dengan tinggi layar (dvh) agar pas di dalam bingkai gambar */
     .input-container {
       position: absolute;
       top: 60%;
@@ -110,10 +106,9 @@
       bgImg.src = 'assets/images/name.png';
       bgImg.onload = function() { if (wrapper) wrapper.classList.add('ready'); };
       bgImg.onerror = function() { if (wrapper) wrapper.classList.add('ready'); };
-      setTimeout(function() { if (wrapper) wrapper.classList.add('ready'); }, 1200);
+      setTimeout(function() { if (wrapper) wrapper.classList.add('ready'); }, 300);
     })();
 
-    // Auto-pause musik saat keluar browser / kunci layar HP
     document.addEventListener('visibilitychange', function() {
       var musik = document.getElementById('bgMusic');
       if (!musik) return;

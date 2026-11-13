@@ -1,12 +1,4 @@
+/* Bersih tanpa menahan opacity agar halaman langsung tampil seketika */
 html, body {
   background-color: #1b5e20;
-}
-
-body {
-  opacity: 0;
-  transition: opacity 0.1s ease;
-}
-
-body.bg-ready {
-  opacity: 1;
 }
