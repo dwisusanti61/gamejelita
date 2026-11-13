@@ -1,20 +1,12 @@
-/* Sembunyikan sejenak sampai gambar latar siap agar tombol tidak muncul duluan */
 html, body {
-  background-color: #1b5e20 !important;
+  background-color: #1b5e20;
 }
 
 body {
   opacity: 0;
-  transition: opacity 0.25s ease-in-out;
+  transition: opacity 0.1s ease;
 }
 
 body.bg-ready {
   opacity: 1;
-}
-
-/* Area aman agar tombol atas tidak terpotong poni/notch atau bar HP */
-.top-nav-group,
-.brand-logo,
-.top-logo {
-  margin-top: env(safe-area-inset-top, 0px);
 }
