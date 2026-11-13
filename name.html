@@ -12,16 +12,29 @@
   <link rel="prefetch" href="menu.html">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
-    html, body { width: 100%; height: 100%; overflow: hidden; background-color: #1b5e20; font-family: 'Segoe UI', Roboto, sans-serif; display: flex; justify-content: center; align-items: center; }
+    
+    /* Lapisan 1: Latar penuh menutup pinggiran kiri-kanan layar HP agar tidak hijau polos */
+    html, body { 
+      width: 100%; 
+      height: 100%; 
+      overflow: hidden; 
+      background: #1b5e20 url('assets/images/name.png') no-repeat center center;
+      background-size: cover;
+      font-family: 'Segoe UI', Roboto, sans-serif; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+    }
 
-    /* Mengunci rasio panggung 16:9 agar posisi kotak input & tombol selalu identik dengan laptop */
+    /* Lapisan 2: Panggung utama 16:9 agar posisi kotak input & tombol selalu presisi */
     .game-wrapper {
       position: relative;
       width: min(100vw, 177.78vh);
       height: min(100vh, 56.25vw);
-      background: #2e7d32 url('assets/images/name.png') no-repeat center center;
+      background: url('assets/images/name.png') no-repeat center center;
       background-size: 100% 100%;
-      opacity: 0; /* Disembunyikan sejenak sampai gambar latar siap 100% */
+      box-shadow: 0 0 30px rgba(0,0,0,0.45);
+      opacity: 0;
       transition: opacity 0.25s ease;
     }
     .game-wrapper.ready { opacity: 1; }
@@ -30,7 +43,6 @@
     .logo-ipa { left: 3%; }
     .logo-jelita { right: 3%; }
 
-    /* Lebar kotak input dikunci proporsional terhadap panggung 16:9 */
     .input-container {
       position: absolute;
       top: 57%;
@@ -97,7 +109,6 @@
   <div class="toast-warning" id="toastWarning">⚠️ Isi namamu dulu ya, Petualang!</div>
 
   <script>
-    // Pastikan gambar latar selesai dimuat dulu baru tampilkan panggung & tombol bersamaan
     (function() {
       var wrapper = document.getElementById('gameWrapper');
       var bgImg = new Image();
@@ -106,6 +117,17 @@
       bgImg.onerror = function() { if (wrapper) wrapper.classList.add('ready'); };
       setTimeout(function() { if (wrapper) wrapper.classList.add('ready'); }, 1500);
     })();
+
+    // Auto-pause musik saat keluar browser / kunci layar HP
+    document.addEventListener('visibilitychange', function() {
+      var musik = document.getElementById('bgMusic');
+      if (!musik) return;
+      if (document.hidden) {
+        musik.pause();
+      } else if (localStorage.getItem('jelita_bgm_muted') !== 'true') {
+        musik.play().catch(function() {});
+      }
+    });
 
     function masukFullScreen() {
       var elem = document.documentElement;
